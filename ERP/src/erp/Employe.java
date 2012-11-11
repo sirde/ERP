@@ -8,53 +8,55 @@ package erp;
  *
  */
 
-//TODO include assert function
+//TODO include assert function and add a lot of comment ;)
 
-public class Employe {
+public abstract class Employe {
 	
-	private String nom;
+	private String name;
 	
 	public Employe()
 	{
-		nom = "sans nom";
+		name = "sans name";
 	}
 
-	public Employe(String leNom)
+	public Employe(String theName)
 	{
-		if(leNom == null)
-			leNom = "sans nom";
+		if(theName == null)
+			theName = "sans name";
 		
-		nom = leNom;
+		name = theName;
 	}
 	
-	public Employe(Employe objetACopier)
+	public Employe(Employe otherObject)
 	{
-		nom = objetACopier.nom;
+		name = otherObject.name;
 	}
 	
-	public String getNom()
+	public String getName()
 	{
-		return nom;
+		return name;
 	}
 	
-	public void setNom(String nouveauNom)
+	public void setName(String newName)
 	{
-		if(nouveauNom == null)
+		if(newName == null)
 			return;
 		
-		nom = nouveauNom;
+		name = newName;
 		
 	}
 	
 	public String toString()
 	{
-		return (nom);
+		return (name);
 	}
 	
-	public boolean equals(Employe autreEmploye)
+	public boolean equals(Employe otherEmploye)
 	{
-		return(nom.equals(autreEmploye));
+		return(name.equals(otherEmploye));
 	}
+	
+	public abstract double getPay();
 	
 
 }
