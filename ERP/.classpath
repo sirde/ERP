@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="C:/Users/sirde/Programmation/eclipse/plugins/org.eclipse.ui.workbench_3.103.1.v20120906-120042.jar" sourcepath="C:/Users/sirde/Programmation/eclipse/plugins/org.eclipse.ui.workbench_3.103.1.v20120906-120042.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sirde/Programmation/eclipse/plugins/com.ibm.icu_4.4.2.v20110823.jar" sourcepath="C:/Users/sirde/Programmation/eclipse/plugins/com.ibm.icu_4.4.2.v20110823.jar"/>
 	<classpathentry kind="lib" path="C:/Users/sirde/Programmation/eclipse/plugins/org.eclipse.ui.forms_3.5.200.v20120705-114351.jar" sourcepath="C:/Users/sirde/Programmation/eclipse/plugins/org.eclipse.ui.forms_3.5.200.v20120705-114351.jar"/>
+	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,14 +3,31 @@ package erp;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import javax.swing.JLayeredPane;
+import javax.swing.JScrollPane;
+import javax.swing.BoxLayout;
+import java.awt.GridLayout;
+import javax.swing.JSplitPane;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
+import javax.swing.SpringLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JMenu;
+import java.awt.Dimension;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JDesktopPane;
 
 public class Erp extends JFrame {
 
@@ -18,8 +35,9 @@ public class Erp extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTable table;
+	private static JTable table;
+	private static DefaultTableModel tableModel;
+	private static int counter = 0;
 
 	/**
 	 * Launch the application.
@@ -43,80 +61,77 @@ public class Erp extends JFrame {
 	public Erp() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 472, 452);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
 
-		JPanel ShowingPanel = new JPanel();
-		ShowingPanel.setBounds(97, 11, 279, 182);
-		contentPane.add(ShowingPanel);
-		
-		
-		String[] columnNames = {"First Name",
-                "Last Name",
-                "Sport",
-                "# of Years",
-                "Vegetarian"};
-		
-		Object[][] data = {
-			    {"Kathy", "Smith",
-			     "Snowboarding", new Integer(5), new Boolean(false)},
-			    {"John", "Doe",
-			     "Rowing", new Integer(3), new Boolean(true)},
-			    {"Sue", "Black",
-			     "Knitting", new Integer(2), new Boolean(false)},
-			    {"Jane", "White",
-			     "Speed reading", new Integer(20), new Boolean(true)},
-			    {"Joe", "Brown",
-			     "Pool", new Integer(10), new Boolean(false)}
-			};
-		
-		
-		JTable table = new JTable(data, columnNames);
-		
-		
-		table = new JTable();
-		ShowingPanel.add(table);
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu mnFile = new JMenu(Messages.getString("Erp.mnFile.text")); //$NON-NLS-1$
+		menuBar.add(mnFile);
+
+		JMenuItem menuOpenFile = new JMenuItem(
+				Messages.getString("Erp.mntmOpenFile.text")); //$NON-NLS-1$
+		mnFile.add(menuOpenFile);
+
+		JMenuItem menuSaveFile = new JMenuItem(
+				Messages.getString("Erp.menuSaveFile.arg0")); //$NON-NLS-1$
+		mnFile.add(menuSaveFile);
 
 		JPanel GestionPanel = new JPanel();
-		GestionPanel.setBounds(97, 231, 279, 74);
-		contentPane.add(GestionPanel);
-		
+		getContentPane().add(GestionPanel, BorderLayout.SOUTH);
+		GestionPanel.setMaximumSize(new Dimension(32767, 600));
 
-		JButton btnAdd = new JButton(Messages.getString("TestGui.btnAdd.text"));
+		JButton btnAdd = new JButton(Messages.getString("erp.btnAdd.text"));
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO create dialog to add an employes
+				// TODO create dialog to add an employes
+
+				Object[] data = { counter, "Kathy", "Employe", new Integer(5) };
+				tableModel.addRow(data);
+				counter++;
+
 			}
 		});
-		
+
 		GestionPanel.add(btnAdd);
 
-		JButton btnEdit = new JButton(
-				Messages.getString("TestGui.btnEdit.text")); //$NON-NLS-1$
+		JButton btnEdit = new JButton(Messages.getString("erp.btnEdit.text")); //$NON-NLS-1$
 		GestionPanel.add(btnEdit);
 
 		JButton btnDelete = new JButton(
-				Messages.getString("TestGui.btnDelete.text")); //$NON-NLS-1$
+				Messages.getString("erp.btnDelete.text")); //$NON-NLS-1$
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				//TODO create dialog to delete the selected employe
+				int[] selection;
+				while (table.getSelectedRows().length > 0) {
+					selection = table.getSelectedRows();
+					tableModel.removeRow(selection[0]);
+					counter--;
+				}
+				table.clearSelection();
+
 			}
 		});
+
 		GestionPanel.add(btnDelete);
 
-		JPanel filePanel = new JPanel();
-		filePanel.setBounds(97, 309, 279, 74);
-		contentPane.add(filePanel);
+		table = new JTable();
+		table.setBounds(0, 0, 300, 0);
 
-		JButton btnSave = new JButton(
-				Messages.getString("TestGui.btnSave.text")); //$NON-NLS-1$
-		filePanel.add(btnSave);
+		JScrollPane pane = new JScrollPane(table);
+		getContentPane().add(pane, BorderLayout.WEST);
+		
+		String[] columnNames = { Messages.getString("erp.index.text"),
+				Messages.getString("erp.name.text"),
+				Messages.getString("erp.type.text"),
+				Messages.getString("erp.salary.text") };
+		
+		tableModel = new DefaultTableModel(columnNames, 0);
 
-		JButton btnOpen = new JButton(
-				Messages.getString("TestGui.btnOpen.text")); //$NON-NLS-1$
-		filePanel.add(btnOpen);
+		table.setModel(tableModel);
+
+
+
+		
 	}
 }
