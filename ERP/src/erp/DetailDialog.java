@@ -21,6 +21,8 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * @author sirde
@@ -73,8 +75,32 @@ public class DetailDialog extends JDialog implements ActionListener {
 	private JLabel labelHours;
 	private Component horizontalStrut_7;
 	private JComboBox<String> comboBoxEmployeType;
+	private boolean okPressed = false;
 
-	public DetailDialog() {
+	/**
+	 * Constructor used to add an element
+	 * 
+	 * @param id
+	 *            The id of the element to add
+	 */
+	public DetailDialog(int id) {
+		this(id, "", 0, 0, 0, 0, 0);
+	}
+
+	/**
+	 * Constructeur utilisé pour éditer un champ
+	 * 
+	 * @param name
+	 * @param id
+	 * @param hourlyRate
+	 * @param hours
+	 * @param commission
+	 * @param sales
+	 * @param salary
+	 * @wbp.parser.constructor
+	 */
+	public DetailDialog(int id, String name, double hourlyRate, double hours,
+			double commission, double sales, double salary) {
 		super((Frame) null, "Mon dialogue", true);
 
 		setSize(300, 238);
@@ -101,6 +127,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalBoxEmployeType.add(horizontalStrut_1);
 
 		comboBoxEmployeType = new JComboBox<String>();
+
 		horizontalBoxEmployeType.add(comboBoxEmployeType);
 		comboBoxEmployeType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -128,9 +155,8 @@ public class DetailDialog extends JDialog implements ActionListener {
 		textFieldID = new JTextField();
 		horizontalBoxIndex.add(textFieldID);
 		textFieldID.setEditable(false);
-		textFieldID.setToolTipText(Messages
-				.getString("Erp.textFieldID.toolTipText")); //$NON-NLS-1$
-		textFieldID.setText(Messages.getString("erp.index.text"));
+		textFieldID.setToolTipText(Messages.getString("erp.index.text")); //$NON-NLS-1$
+		textFieldID.setText(String.valueOf(id));
 
 		horizontalBoxName = Box.createHorizontalBox();
 		verticalBoxTextFields.add(horizontalBoxName);
@@ -144,7 +170,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 		textFieldName = new JTextField();
 		horizontalBoxName.add(textFieldName);
-		textFieldName.setText("");
+		textFieldName.setText(name);
 		textFieldName.setColumns(10);
 
 		horizontalBoxCommission = Box.createHorizontalBox();
@@ -161,8 +187,9 @@ public class DetailDialog extends JDialog implements ActionListener {
 		textFieldCommission = new JFormattedTextField(
 				NumberFormat.getInstance());
 		horizontalBoxCommission.add(textFieldCommission);
-		textFieldCommission.setToolTipText(Messages.getString("Erp.textFieldComission.text")); //$NON-NLS-1$
-		textFieldCommission.setText("");
+		textFieldCommission.setToolTipText(Messages
+				.getString("Erp.textFieldComission.text")); //$NON-NLS-1$
+		textFieldCommission.setText(String.valueOf(commission));
 		textFieldCommission.setColumns(10);
 
 		horizontalBoxSales = Box.createHorizontalBox();
@@ -179,7 +206,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalBoxSales.add(textFieldSales);
 		textFieldSales.setToolTipText(Messages
 				.getString("Erp.textFieldSales.toolTipText")); //$NON-NLS-1$
-		textFieldSales.setText("");
+		textFieldSales.setText(String.valueOf(sales));
 		textFieldSales.setColumns(10);
 
 		horizontalBoxHourlyRate = Box.createHorizontalBox();
@@ -198,7 +225,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalBoxHourlyRate.add(textFieldHourlyRate);
 		textFieldHourlyRate.setToolTipText(Messages
 				.getString("Erp.textFieldHourlyRate.toolTipText")); //$NON-NLS-1$
-		textFieldHourlyRate.setText("");
+		textFieldHourlyRate.setText(String.valueOf(hourlyRate));
 		textFieldHourlyRate.setColumns(10);
 
 		horizontalBoxHours = Box.createHorizontalBox();
@@ -215,7 +242,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalBoxHours.add(textFieldHours);
 		textFieldHours.setToolTipText(Messages
 				.getString("Erp.textFieldHours.toolTipText")); //$NON-NLS-1$
-		textFieldHours.setText("");
+		textFieldHours.setText(String.valueOf(hours));
 		textFieldHours.setColumns(10);
 
 		horizontalBoxSalary = Box.createHorizontalBox();
@@ -233,10 +260,27 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalBoxSalary.add(textFieldSalary);
 		textFieldSalary.setToolTipText(Messages
 				.getString("Erp.textFieldSalary.toolTipText"));
-		textFieldSalary.setText("");
+		textFieldSalary.setText(String.valueOf(salary));
 		textFieldSalary.setColumns(10);
 
-		okButton = new JButton("OK"); // Création d'un JButton.
+		okButton = new JButton("OK");
+
+		getContentPane().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == KeyEvent.VK_ENTER)
+					setVisible(false);
+			}
+		});
+
+		comboBoxEmployeType.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (e.getKeyChar() == KeyEvent.VK_ENTER)
+					setVisible(false);
+			}
+		});
+
 		verticalBoxTextFields.add(okButton);
 		okButton.addActionListener(this);
 
@@ -272,8 +316,9 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
-			setVisible(false); // L'objet écouteur associé à la boîte de
-								// dialogue
+			okPressed = true;
+			setVisible(false);
+
 		} // met fin au dialogue et rend la boite invisible.
 	}
 
@@ -315,5 +360,9 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 	public void setTextFieldSalaryEditable(boolean editable) {
 		textFieldSalary.setEditable(editable);
+	}
+
+	public boolean getOkPressed() {
+		return okPressed;
 	}
 }

@@ -3,108 +3,156 @@
  */
 package erp;
 
+import java.io.Serializable;
+
 /**
  * @author sirde
- *
+ * 
  */
-public class LinkedList {
+public class LinkedList implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 607643732520894909L;
+
+	// ----------------------------------------------------------------------------
+	/**
+	 * Class Cellule interne de la class List
+	 */
+
+	class Cell implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7412202956505489139L;
+		private Employe content;
+		private Cell next;
+
+		protected Cell(Employe content, Cell next) {
+			this.content = content;
+			this.next = next;
+		}
+	}
+
+	// ----------------------------------------------------------------------------
+
+	// Données privées
+	// -----------------------------------------------------------
+
+	private Cell firstCell;
+	private int size;
+
+	// Méthodes publiques
+	// --------------------------------------------------------
+	/**
+	 * Constructeur.
+	 */
+	public LinkedList() {
+		firstCell = null;
+		size = 0;
+	}
+
+	/**
+	 * Predicat : Retourne true si la liste est vide, false sinon.
+	 */
+	public boolean isEmpty() {
+		return (firstCell == null);
+	}
+
+	/**
+	 * Mutateur : Ajoute l'élément elem en tête de liste.
+	 */
+	public void addFirst(Employe elem) {
+		Cell nlleCellule = new Cell(elem, firstCell);
+		firstCell = nlleCellule;
+		size++;
+	}
+
+	public void add(Employe elem) {
+		Cell newCellule = new Cell(elem, null);
+
+		if (firstCell == null) {
+			firstCell = newCellule;
+		} else {
+			Cell a = firstCell;
+
+			while (a.next != null) {
+				a = a.next;
+			}
+
+			a.next = newCellule;
+			size++;
+		}
+
+	}
+
+	/**
+	 * Parcourt et affiche la liste. Précondition : Liste non-vide.
+	 */
+	public void afficherListe() {
+		Cell a = firstCell;
+
+		while (a != null) {
+			System.out.println("Element : " + a.content.toString());
+			a = a.next;
+		}
+	}
+
+	public Employe get(int index) {
+		Cell a = firstCell;
+		int i = 1;
+		while (i < index && a.next != null) {
+			a = a.next;
+			i++;
+		}
+
+		if (index == i)
+			return a.content.clone();
+		else
+			return null;
+	}
+
+	public void delete(int index) {
+
+		if(index == 0 && firstCell != null)
+			firstCell = firstCell.next;
+		
+		Cell a = firstCell;	
+		Cell b = firstCell.next;
+		
+		int i = 1;
+		
+		while (i < index && b.next != null) {
+			a = a.next;
+			b = b.next;
+
+			i++;
+		}
+		if (index == i)
+		{
+			a.next = a.next.next;
+			size--;
+		}
+		
+	}
+
+	public void replace(int index, Employe elem) {
+		
+		Cell a = firstCell;	
+		
+		int i = 0;
+		
+		while (index != i && a.next != null) {
+			a = a.next;
+			i++;
+		}
+		if (index == i)
+			a.content = elem;
+	}
 	
-  //----------------------------------------------------------------------------
-  /**
-    * Class Cellule interne de la class List
-    */
-	
-  class Cellule
-  {
-    private Object contenu;
-    private Cellule suivant;
-
-    protected Cellule(Object value, Cellule next)
-    {
-      contenu = value;
-      suivant = next;
-    }
-  }
-  //----------------------------------------------------------------------------
-
-  // Données privées -----------------------------------------------------------
-  
-  private Cellule celluleTete;
-
-  // Méthodes publiques --------------------------------------------------------	  
-  /**
-    * Constructeur.
-    */
-  public LinkedList()
-  {
-    celluleTete = null;
-  }
-
-  /**
-    * Predicat : Retourne true si la liste est vide, false sinon.
-    */
-  public boolean estVide()
-  {
-    return (celluleTete == null);
-  }
-
-  /**
-    * Mutateur : Ajoute l'élément elem en tête de liste.
-    */
-  public void ajouterEnTete(Object elem)
-  {
-    Cellule nlleCellule = new Cellule(elem, celluleTete);
-    celluleTete = nlleCellule;
-  }
-
-  /**
-    * Mutateur : Recherche et supprime (la première occurence de) l'élément
-    * elem s'il est dans la liste. Ne fait rien si l'élément elem n'est pas
-    * dans la liste.
-    */
-  public void rechercherSupprimer(Object elem)
-  {
-    Cellule a = celluleTete;  
-  
-    if (a != null)
-    {
-      if ( a.contenu.equals(elem) )
-        celluleTete = celluleTete.suivant;
-      else
-      {
-        Cellule b = a ;
-        while (b.suivant != null && !b.suivant.contenu.equals(elem) )
-          b = b.suivant;
-        if (b.suivant != null)
-          b.suivant = b.suivant.suivant;
-      }
-    }
-  }
-
-  /**
-    * Parcourt et affiche la liste.
-    * Précondition : Liste non-vide.
-    */
-  public void afficherListe()
-  {
-    Cellule a = celluleTete;
-    
-    while (a != null)
-    {
-      System.out.println("Element : " + a.contenu.toString());
-      a = a.suivant;
-    }
-  }
-  
-  public void delete(int index)
-  {
-	  Cellule a = celluleTete;
-	  int i = 0;
-	  while(index != i && a.suivant !=null)
-	  {
-		  a = a.suivant;
-	  }
-  }
+	public int getSize()
+	{
+		return size;
+	}
 }
-

@@ -6,6 +6,10 @@ package erp;
  */
 public class HourlyEmploye extends Employe {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4132032299334681517L;
 	static final double DEFAULT_RATE = 0;
 	static final int DEFAULT_HOURS = 0;
 
@@ -71,5 +75,10 @@ public class HourlyEmploye extends Employe {
 	@Override
 	public String toString() {
 		return (getName() + "rate" + rate + ", hours=" + hours + "]");
+	}
+
+	@Override
+	protected HourlyEmploye clone() {
+		return new HourlyEmploye(this);
 	}
 }

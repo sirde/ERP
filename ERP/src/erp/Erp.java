@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
@@ -15,16 +17,19 @@ import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 
-import javax.swing.JFormattedTextField;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import java.awt.Dimension;
-import javax.swing.JTextField;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.DefaultComboBoxModel;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.File;
 
-import com.ibm.icu.text.NumberFormat;
+import javax.swing.JRadioButtonMenuItem;
 
 public class Erp extends JFrame {
 
@@ -38,9 +43,9 @@ public class Erp extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static JTable table;
 	private static DefaultTableModel tableModel;
-	private static int counter = 0;
-	
-	Employe employe;
+
+	private Employe employe;
+	private LinkedList employeList;
 
 	/**
 	 * Launch the application.
@@ -58,6 +63,41 @@ public class Erp extends JFrame {
 		});
 	}
 
+	private void openAddDialog() {
+
+		DetailDialog addDialog = new DetailDialog(employeList.getSize() + 1);
+		addDialog.setVisible(true);
+
+		if (addDialog.getOkPressed()) {
+
+			String name = addDialog.getTextFieldName();
+			double hours = Double.valueOf(addDialog.getTextFieldHours());
+			double hourlyRate = Double.valueOf(addDialog
+					.getTextFieldHourlyRate());
+
+			EmployeType employeType = addDialog.getEmployeType();
+
+			switch (employeType) {
+			case HOURLY_EMPLOYE:
+				employe = new HourlyEmploye(name, hourlyRate, hours);
+				break;
+
+			case SALESMAN:
+				break;
+
+			case MANAGER:
+				break;
+			}
+
+			Object[] data = { employeList.getSize() + 1, name, employeType,
+					employe.getPay() };
+
+			employeList.add(employe);
+			tableModel.addRow(data);
+		}
+
+	}
+
 	/**
 	 * Create the frame.
 	 */
@@ -73,10 +113,74 @@ public class Erp extends JFrame {
 
 		JMenuItem menuOpenFile = new JMenuItem(
 				Messages.getString("Erp.mntmOpenFile.text")); //$NON-NLS-1$
+		menuOpenFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+
+					int counter = employeList.getSize();
+					while (counter > 0) {
+						tableModel.removeRow(0);
+						counter--;
+					}
+
+					FileInputStream fis = new FileInputStream("C:/list.ser");
+					ObjectInputStream ois = new ObjectInputStream(fis);
+					employeList = (LinkedList) ois.readObject();
+					ois.close();
+
+					int i = 1;
+					while (i <= employeList.getSize()) {
+						employe = employeList.get(i);
+						EmployeType employeType = EmployeType.MANAGER;
+
+						if (employe instanceof HourlyEmploye)
+							employeType = EmployeType.HOURLY_EMPLOYE;
+
+						Object[] data = { i, employe.getName(), employeType,
+								employe.getPay() };
+						tableModel.addRow(data);
+						i++;
+					}
+
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
 		mnFile.add(menuOpenFile);
 
 		JMenuItem menuSaveFile = new JMenuItem(
 				Messages.getString("Erp.menuSaveFile.arg0")); //$NON-NLS-1$
+
+		menuSaveFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					File file = new File("C:/list.ser");
+					if (!file.exists())
+						file.createNewFile();
+					FileOutputStream fos = new FileOutputStream(file);
+					ObjectOutputStream oos = new ObjectOutputStream(fos);
+					oos.writeObject(employeList);
+					oos.close();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
+
 		mnFile.add(menuSaveFile);
 
 		JMenu mnOption = new JMenu(Messages.getString("Erp.mnOption.text")); //$NON-NLS-1$
@@ -89,6 +193,8 @@ public class Erp extends JFrame {
 		JRadioButtonMenuItem rdbtnmntmFrench = new JRadioButtonMenuItem(
 				Messages.getString("Erp.rdbtnmntmFrench.text")); //$NON-NLS-1$
 		mnOption.add(rdbtnmntmFrench);
+
+		employeList = new LinkedList();
 
 		table = new JTable();
 		table.setBounds(0, 0, 300, 0);
@@ -109,47 +215,23 @@ public class Erp extends JFrame {
 		getContentPane().add(panelInput, BorderLayout.CENTER);
 		panelInput.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-
-
 		JPanel GestionPanel = new JPanel();
 		getContentPane().add(GestionPanel, BorderLayout.SOUTH);
 		GestionPanel.setMaximumSize(new Dimension(32767, 600));
 
 		JButton btnAdd = new JButton(Messages.getString("erp.btnAdd.text"));
+
+		btnAdd.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if (arg0.getKeyChar() == KeyEvent.VK_ENTER)
+					openAddDialog();
+			}
+		});
+
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO create dialog to add an employes
-				
-				DetailDialog addDialog = new DetailDialog();
-				addDialog.setVisible(true);
-				
-				
-
-				String name = addDialog.getTextFieldName();
-				double hours = Double.valueOf(addDialog.getTextFieldHours());
-				double hourlyRate = Double.valueOf(addDialog.getTextFieldHourlyRate());
-				
-				EmployeType employeType = addDialog.getEmployeType();
-				
-				switch (employeType) {
-				case HOURLY_EMPLOYE:
-					employe = new HourlyEmploye(name, hourlyRate, hours);
-					break;
-
-				case SALESMAN:
-					break;
-
-				case MANAGER:
-					break;
-
-				}
-				
-				double salary = employe.getPay();
-
-				Object[] data = { counter, name, employeType, employe.getPay() };
-				tableModel.addRow(data);
-				counter++;
-
+				openAddDialog();
 			}
 		});
 
@@ -158,22 +240,65 @@ public class Erp extends JFrame {
 		JButton btnEdit = new JButton(Messages.getString("erp.btnEdit.text")); //$NON-NLS-1$
 		btnEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
-				if(table.getSelectedRows().length != 1)
-					; //TODO create error dialog when more or less than 1 line is selected
-				else
-				{
-					//Get the values of the selected row
-					table.getSelectedRow();
-	
-					EmployeType employeType;
-					
-					DetailDialog bd = new DetailDialog();
-					bd.setVisible(true);
-				}
 
-			    
+				if (table.getSelectedRows().length != 1)
+					; // TODO create error dialog when more or less than 1 line
+						// is selected
+				else {
+					int index = (int) table.getValueAt(table.getSelectedRow(),
+							0);
+					employe = employeList.get(index);
+					String name = employe.getName();
+					double hourlyRate = 0;
+					double hours = 0;
+					double commission = 0;
+					double sales = 0;
+					double salary = 0;
+
+					if (employe instanceof HourlyEmploye) {
+						name = employe.getName();
+						hourlyRate = ((HourlyEmploye) employe).getRate();
+						hours = ((HourlyEmploye) employe).getHours();
+					}
+
+					DetailDialog editDialog = new DetailDialog(index, name,
+							hourlyRate, hours, commission, sales, salary);
+					editDialog.setVisible(true);
+
+					if (editDialog.getOkPressed()) {
+
+						if(!name.equals(editDialog.getTextFieldName()))
+							;//TODO replace value
+						
+						//if(hours.equals(Double.valueOf(editDialog.getTextFieldHours()))
+							;// TODO replace value
+						
+						hourlyRate = Double.valueOf(editDialog
+								.getTextFieldHourlyRate());
+
+						EmployeType employeType = editDialog.getEmployeType();
+
+						switch (employeType) {
+						case HOURLY_EMPLOYE:
+							employe = new HourlyEmploye(name, hourlyRate, hours);
+							break;
+
+						case SALESMAN:
+							break;
+
+						case MANAGER:
+							break;
+						}
+
+						Object[] data = { employeList.getSize() + 1, name,
+								employeType, employe.getPay() };
+
+						employeList.replace(index, employe);
+						tableModel.addRow(data);
+					}
+				}
 			}
+
 		});
 		GestionPanel.add(btnEdit);
 
@@ -183,17 +308,23 @@ public class Erp extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				int[] selection;
+				int index;
 				while (table.getSelectedRows().length > 0) {
 					selection = table.getSelectedRows();
+					index = ((int) table.getValueAt(selection[0], 0)) - 1;
+
 					tableModel.removeRow(selection[0]);
-					counter--;
+					employeList.delete(index);
 				}
 				table.clearSelection();
+
+				for (int i = 0; i < table.getRowCount(); i++) {
+					table.setValueAt(i + 1, i, 0);
+				}
 
 			}
 		});
 
 		GestionPanel.add(btnDelete);
-
 	}
 }

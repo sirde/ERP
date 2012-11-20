@@ -3,6 +3,8 @@
  */
 package erp;
 
+import java.io.Serializable;
+
 /**
  * @author sirde
  *
@@ -10,8 +12,14 @@ package erp;
 
 //TODO include assert function and add a lot of comment ;)
 
-public abstract class Employe {
+public abstract class Employe implements Serializable, Cloneable {
 	
+	/**
+	 * 
+	 * 
+	 */
+	 
+	private static final long serialVersionUID = 1L;	
 	private String name;
 	
 	public Employe()
@@ -57,6 +65,9 @@ public abstract class Employe {
 	}
 	
 	public abstract double getPay();
+	
+
+	abstract protected Employe clone();
 	
 
 }
