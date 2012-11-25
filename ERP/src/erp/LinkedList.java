@@ -74,6 +74,7 @@ public class LinkedList implements Serializable {
 
 		if (firstCell == null) {
 			firstCell = newCellule;
+			size++;
 		} else {
 			Cell a = firstCell;
 

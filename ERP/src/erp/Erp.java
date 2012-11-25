@@ -20,6 +20,8 @@ import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
+
 import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -200,7 +202,7 @@ public class Erp extends JFrame {
 		table.setBounds(0, 0, 300, 0);
 
 		JScrollPane pane = new JScrollPane(table);
-		getContentPane().add(pane, BorderLayout.NORTH);
+		getContentPane().add(pane, BorderLayout.CENTER);
 
 		String[] columnNames = { Messages.getString("erp.index.text"),
 				Messages.getString("erp.name.text"),
@@ -210,10 +212,6 @@ public class Erp extends JFrame {
 		tableModel = new DefaultTableModel(columnNames, 0);
 
 		table.setModel(tableModel);
-
-		JPanel panelInput = new JPanel();
-		getContentPane().add(panelInput, BorderLayout.CENTER);
-		panelInput.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		JPanel GestionPanel = new JPanel();
 		getContentPane().add(GestionPanel, BorderLayout.SOUTH);
@@ -242,8 +240,7 @@ public class Erp extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (table.getSelectedRows().length != 1)
-					; // TODO create error dialog when more or less than 1 line
-						// is selected
+					JOptionPane.showMessageDialog(getContentPane(), "Error, you should select 1 line.");
 				else {
 					int index = (int) table.getValueAt(table.getSelectedRow(),
 							0);
@@ -307,6 +304,8 @@ public class Erp extends JFrame {
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				if (table.getSelectedRows().length < 1)
+					JOptionPane.showMessageDialog(getContentPane(), "Error, you should select at least 1 line.");
 				int[] selection;
 				int index;
 				while (table.getSelectedRows().length > 0) {

@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.ibm.icu.text.NumberFormat;
@@ -21,8 +22,6 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 /**
  * @author sirde
@@ -265,6 +264,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 		okButton = new JButton("OK");
 
+		/* Desactivé car créer des lenteurs
 		getContentPane().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -280,6 +280,8 @@ public class DetailDialog extends JDialog implements ActionListener {
 					setVisible(false);
 			}
 		});
+		
+		*/
 
 		verticalBoxTextFields.add(okButton);
 		okButton.addActionListener(this);
@@ -316,8 +318,13 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
-			okPressed = true;
-			setVisible(false);
+			if(textFieldName.getText() == "")
+				JOptionPane.showMessageDialog(getContentPane(), "Error, all fields are not correctly filled.");
+			else
+			{
+				okPressed = true;
+				setVisible(false);
+			}
 
 		} // met fin au dialogue et rend la boite invisible.
 	}
