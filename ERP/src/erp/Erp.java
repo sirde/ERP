@@ -32,9 +32,19 @@ import java.io.ObjectOutputStream;
 import java.io.File;
 
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.ListSelectionModel;
+
+/**
+ * @author sirde
+ * 
+ */
 
 public class Erp extends JFrame {
 
+	/**
+	 * @author sirde
+	 * 
+	 */
 	public enum EmployeType {
 		HOURLY_EMPLOYE, SALESMAN, MANAGER;
 	}
@@ -48,9 +58,12 @@ public class Erp extends JFrame {
 
 	private Employe employe;
 	private LinkedList employeList;
+	private JButton btnShow;
 
 	/**
 	 * Launch the application.
+	 * 
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -65,6 +78,66 @@ public class Erp extends JFrame {
 		});
 	}
 
+	private void openEditDialog(int row) {
+
+		int index = (int) table.getValueAt(table.getSelectedRow(), 0);
+
+		employe = employeList.get(index);
+		String name = employe.getName();
+		double hourlyRate = 0;
+		double hours = 0;
+		double commission = 0;
+		double sales = 0;
+		double salary = 0;
+
+		if (employe instanceof HourlyEmploye) {
+			name = employe.getName();
+			hourlyRate = ((HourlyEmploye) employe).getRate();
+			hours = ((HourlyEmploye) employe).getHours();
+		}
+
+		DetailDialog editDialog = new DetailDialog(index, name, hourlyRate,
+				hours, commission, sales, salary);
+		editDialog.setVisible(true);
+
+		if (editDialog.getOkPressed()) {
+
+			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
+
+			EmployeType employeType = editDialog.getEmployeType();
+			name = editDialog.getTextFieldName();
+			hours = Double.valueOf(editDialog.getTextFieldHours());
+			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
+
+			Employe newEmploye = employe; // TODO Delete
+											// initialization
+
+			switch (employeType) {
+			case HOURLY_EMPLOYE:
+				newEmploye = new HourlyEmploye(name, hourlyRate, hours);
+				break;
+
+			case SALESMAN:
+				break;
+
+			case MANAGER:
+				break;
+			}
+
+			if (!newEmploye.equals(employe)) {
+				employeList.replace(index, newEmploye);
+				table.setValueAt(newEmploye.getName(), index - 1, 1);
+				table.setValueAt(employeType, index - 1, 2);
+				table.setValueAt(newEmploye.getPay(), index - 1, 3);
+
+			}
+
+		}
+	}
+
+	/**
+	 * 
+	 */
 	private void openAddDialog() {
 
 		DetailDialog addDialog = new DetailDialog(employeList.getSize() + 1);
@@ -199,6 +272,7 @@ public class Erp extends JFrame {
 		employeList = new LinkedList();
 
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		table.setBounds(0, 0, 300, 0);
 
 		JScrollPane pane = new JScrollPane(table);
@@ -210,8 +284,20 @@ public class Erp extends JFrame {
 				Messages.getString("erp.salary.text") };
 
 		tableModel = new DefaultTableModel(columnNames, 0);
-
+		
+		
 		table.setModel(tableModel);
+
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					JTable target = (JTable) e.getSource();
+					int row = target.getSelectedRow();
+
+					openEditDialog(row);
+				}
+			}
+		});
 
 		JPanel GestionPanel = new JPanel();
 		getContentPane().add(GestionPanel, BorderLayout.SOUTH);
@@ -235,69 +321,19 @@ public class Erp extends JFrame {
 
 		GestionPanel.add(btnAdd);
 
-		JButton btnEdit = new JButton(Messages.getString("erp.btnEdit.text")); //$NON-NLS-1$
-		btnEdit.addActionListener(new ActionListener() {
+		btnShow = new JButton(Messages.getString("erp.btnEdit.text")); //$NON-NLS-1$
+		btnShow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (table.getSelectedRows().length != 1)
-					JOptionPane.showMessageDialog(getContentPane(), "Error, you should select 1 line.");
+					JOptionPane.showMessageDialog(getContentPane(),
+							"Error, you should select 1 line.");
 				else {
-					int index = (int) table.getValueAt(table.getSelectedRow(),
-							0);
-					employe = employeList.get(index);
-					String name = employe.getName();
-					double hourlyRate = 0;
-					double hours = 0;
-					double commission = 0;
-					double sales = 0;
-					double salary = 0;
-
-					if (employe instanceof HourlyEmploye) {
-						name = employe.getName();
-						hourlyRate = ((HourlyEmploye) employe).getRate();
-						hours = ((HourlyEmploye) employe).getHours();
-					}
-
-					DetailDialog editDialog = new DetailDialog(index, name,
-							hourlyRate, hours, commission, sales, salary);
-					editDialog.setVisible(true);
-
-					if (editDialog.getOkPressed()) {
-
-						if(!name.equals(editDialog.getTextFieldName()))
-							;//TODO replace value
-						
-						//if(hours.equals(Double.valueOf(editDialog.getTextFieldHours()))
-							;// TODO replace value
-						
-						hourlyRate = Double.valueOf(editDialog
-								.getTextFieldHourlyRate());
-
-						EmployeType employeType = editDialog.getEmployeType();
-
-						switch (employeType) {
-						case HOURLY_EMPLOYE:
-							employe = new HourlyEmploye(name, hourlyRate, hours);
-							break;
-
-						case SALESMAN:
-							break;
-
-						case MANAGER:
-							break;
-						}
-
-						Object[] data = { employeList.getSize() + 1, name,
-								employeType, employe.getPay() };
-
-						employeList.replace(index, employe);
-						tableModel.addRow(data);
-					}
+					openEditDialog(table.getSelectedRow());
 				}
 			}
-
 		});
-		GestionPanel.add(btnEdit);
+		GestionPanel.add(btnShow);
 
 		JButton btnDelete = new JButton(
 				Messages.getString("erp.btnDelete.text")); //$NON-NLS-1$
@@ -305,12 +341,13 @@ public class Erp extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if (table.getSelectedRows().length < 1)
-					JOptionPane.showMessageDialog(getContentPane(), "Error, you should select at least 1 line.");
+					JOptionPane.showMessageDialog(getContentPane(),
+							"Error, you should select at least 1 line.");
 				int[] selection;
 				int index;
 				while (table.getSelectedRows().length > 0) {
 					selection = table.getSelectedRows();
-					index = ((int) table.getValueAt(selection[0], 0)) - 1;
+					index = ((int) table.getValueAt(selection[0], 0));
 
 					tableModel.removeRow(selection[0]);
 					employeList.delete(index);

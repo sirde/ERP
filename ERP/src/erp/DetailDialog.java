@@ -15,11 +15,12 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import com.ibm.icu.text.NumberFormat;
-
+import java.text.NumberFormat;
 import erp.Erp.EmployeType;
 import javax.swing.Box;
 import javax.swing.JLabel;
+import javax.swing.text.NumberFormatter;
+
 import java.awt.Component;
 import java.awt.Dimension;
 
@@ -37,6 +38,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 	/**
 	 * 
 	 */
+	
 	private JButton okButton; // Composant Swing.
 
 	private JTextField textFieldName;
@@ -84,6 +86,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 	 */
 	public DetailDialog(int id) {
 		this(id, "", 0, 0, 0, 0, 0);
+		
 	}
 
 	/**
@@ -101,7 +104,16 @@ public class DetailDialog extends JDialog implements ActionListener {
 	public DetailDialog(int id, String name, double hourlyRate, double hours,
 			double commission, double sales, double salary) {
 		super((Frame) null, "Mon dialogue", true);
+		
+		
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in javax.swing.text
+		numberFormat.setMaximumFractionDigits(2);
+		NumberFormatter nf = new NumberFormatter(numberFormat);
+		nf.setMinimum(0.0);
+		nf.setMaximum(999999999.9);
+		nf.setAllowsInvalid(false);
 
+		
 		setSize(300, 238);
 		setLocationRelativeTo(null);
 
@@ -183,8 +195,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalStrut_2 = Box.createHorizontalStrut(20);
 		horizontalBoxCommission.add(horizontalStrut_2);
 
-		textFieldCommission = new JFormattedTextField(
-				NumberFormat.getInstance());
+		textFieldCommission = new JFormattedTextField(nf);
 		horizontalBoxCommission.add(textFieldCommission);
 		textFieldCommission.setToolTipText(Messages
 				.getString("Erp.textFieldComission.text")); //$NON-NLS-1$
@@ -201,7 +212,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalStrut_3 = Box.createHorizontalStrut(20);
 		horizontalBoxSales.add(horizontalStrut_3);
 
-		textFieldSales = new JTextField();
+		textFieldSales = new JFormattedTextField(nf);
 		horizontalBoxSales.add(textFieldSales);
 		textFieldSales.setToolTipText(Messages
 				.getString("Erp.textFieldSales.toolTipText")); //$NON-NLS-1$
@@ -219,8 +230,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalStrut_5 = Box.createHorizontalStrut(20);
 		horizontalBoxHourlyRate.add(horizontalStrut_5);
 
-		textFieldHourlyRate = new JFormattedTextField(
-				NumberFormat.getInstance());
+		textFieldHourlyRate = new JFormattedTextField(nf);
 		horizontalBoxHourlyRate.add(textFieldHourlyRate);
 		textFieldHourlyRate.setToolTipText(Messages
 				.getString("Erp.textFieldHourlyRate.toolTipText")); //$NON-NLS-1$
@@ -237,7 +247,8 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalStrut_6 = Box.createHorizontalStrut(20);
 		horizontalBoxHours.add(horizontalStrut_6);
 
-		textFieldHours = new JFormattedTextField(NumberFormat.getInstance());
+		textFieldHours = new JFormattedTextField(nf);
+		
 		horizontalBoxHours.add(textFieldHours);
 		textFieldHours.setToolTipText(Messages
 				.getString("Erp.textFieldHours.toolTipText")); //$NON-NLS-1$
@@ -254,8 +265,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalStrut_4 = Box.createHorizontalStrut(20);
 		horizontalBoxSalary.add(horizontalStrut_4);
 
-		textFieldSalary = new JTextField();
-		textFieldSalary.setEditable(false);
+		textFieldSalary = new JFormattedTextField(nf);
 		horizontalBoxSalary.add(textFieldSalary);
 		textFieldSalary.setToolTipText(Messages
 				.getString("Erp.textFieldSalary.toolTipText"));
@@ -290,7 +300,6 @@ public class DetailDialog extends JDialog implements ActionListener {
 	}
 
 	private void updateGUI() {
-		// TODO switch to java 7 to use switch instead of if
 		if (comboBoxEmployeType.getSelectedItem() == "HourlyEmploye") {
 			horizontalBoxSales.setVisible(false);
 			horizontalBoxCommission.setVisible(false);
@@ -318,8 +327,8 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == okButton) {
-			if(textFieldName.getText() == "")
-				JOptionPane.showMessageDialog(getContentPane(), "Error, all fields are not correctly filled.");
+			if(textFieldName.getText().equals(""))
+				JOptionPane.showMessageDialog(getContentPane(), "Error, a name is required.");
 			else
 			{
 				okPressed = true;

@@ -117,7 +117,10 @@ public class LinkedList implements Serializable {
 	public void delete(int index) {
 
 		if(index == 0 && firstCell != null)
+		{
 			firstCell = firstCell.next;
+			size--;
+		}
 		
 		Cell a = firstCell;	
 		Cell b = firstCell.next;
@@ -142,7 +145,7 @@ public class LinkedList implements Serializable {
 		
 		Cell a = firstCell;	
 		
-		int i = 0;
+		int i = 1;
 		
 		while (index != i && a.next != null) {
 			a = a.next;
