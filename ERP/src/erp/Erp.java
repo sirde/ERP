@@ -283,7 +283,20 @@ public class Erp extends JFrame {
 				Messages.getString("erp.type.text"),
 				Messages.getString("erp.salary.text") };
 
-		tableModel = new DefaultTableModel(columnNames, 0);
+		//tableModel = new DefaultTableModel(columnNames, 0);
+		tableModel = new DefaultTableModel(columnNames, 0) {
+
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		};
 		
 		
 		table.setModel(tableModel);

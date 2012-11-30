@@ -26,6 +26,9 @@ public class HourlyEmploye extends Employe {
 	}
 
 	/**
+	 * @param theName 
+	 * @param theRate 
+	 * @param theHours 
 	 * @param leNom
 	 */
 	public HourlyEmploye(String theName, double theRate, double theHours) {
@@ -41,6 +44,7 @@ public class HourlyEmploye extends Employe {
 	}
 
 	/**
+	 * @param otherObject 
 	 * @param objetACopier
 	 */
 	public HourlyEmploye(HourlyEmploye otherObject) {
@@ -49,19 +53,31 @@ public class HourlyEmploye extends Employe {
 		hours = otherObject.hours;
 	}
 
+	/**
+	 * @return the rate
+	 */
 	public double getRate() {
 		return rate;
 	}
 
+	/**
+	 * @param rate
+	 */
 	public void setRate(double rate) {
 		if (rate >= 0)
 			this.rate = rate;
 	}
 
+	/**
+	 * @return the hours
+	 */
 	public double getHours() {
 		return hours;
 	}
 
+	/**
+	 * @param hours
+	 */
 	public void setHours(int hours) {
 
 		if (hours >= 0)
