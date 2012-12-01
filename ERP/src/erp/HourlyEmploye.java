@@ -97,4 +97,36 @@ public class HourlyEmploye extends Employe {
 	protected HourlyEmploye clone() {
 		return new HourlyEmploye(this);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		long temp;
+		temp = Double.doubleToLongBits(hours);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(rate);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		HourlyEmploye other = (HourlyEmploye) obj;
+		if (Double.doubleToLongBits(hours) != Double
+				.doubleToLongBits(other.hours))
+			return false;
+		if (Double.doubleToLongBits(rate) != Double
+				.doubleToLongBits(other.rate))
+			return false;
+		return true;
+	}
+	
+	
 }

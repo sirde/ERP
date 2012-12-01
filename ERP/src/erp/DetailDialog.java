@@ -85,7 +85,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 	 *            The id of the element to add
 	 */
 	public DetailDialog(int id) {
-		this(id, "", 0, 0, 0, 0, 0);
+		this(EmployeType.HOURLY_EMPLOYE, id, "", 0, 0, 0, 0, 0);
 		
 	}
 
@@ -101,7 +101,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 	 * @param salary
 	 * @wbp.parser.constructor
 	 */
-	public DetailDialog(int id, String name, double hourlyRate, double hours,
+	public DetailDialog(EmployeType employeType, int id, String name, double hourlyRate, double hours,
 			double commission, double sales, double salary) {
 		super((Frame) null, "Mon dialogue", true);
 		
@@ -140,6 +140,16 @@ public class DetailDialog extends JDialog implements ActionListener {
 		comboBoxEmployeType = new JComboBox<String>();
 
 		horizontalBoxEmployeType.add(comboBoxEmployeType);
+		
+
+		comboBoxEmployeType.setToolTipText(Messages
+				.getString("Erp.comboBoxEmployeType.toolTipText")); //$NON-NLS-1$
+		comboBoxEmployeType.setModel(new DefaultComboBoxModel<String>(
+				new String[] { "HourlyEmploye", "Salesman", "Manager" }));
+		
+		
+		comboBoxEmployeType.setSelectedIndex(employeType.ordinal());
+		
 		comboBoxEmployeType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -147,11 +157,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 			}
 
 		});
-
-		comboBoxEmployeType.setToolTipText(Messages
-				.getString("Erp.comboBoxEmployeType.toolTipText")); //$NON-NLS-1$
-		comboBoxEmployeType.setModel(new DefaultComboBoxModel<String>(
-				new String[] { "HourlyEmploye", "Salesman", "Manager" }));
+		
 
 		horizontalBoxIndex = Box.createHorizontalBox();
 		verticalBoxTextFields.add(horizontalBoxIndex);

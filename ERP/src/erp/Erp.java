@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -17,6 +18,7 @@ import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 
+import javax.swing.JFileChooser;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -40,6 +42,7 @@ import javax.swing.ListSelectionModel;
  */
 
 public class Erp extends JFrame {
+	
 
 	/**
 	 * @author sirde
@@ -55,6 +58,7 @@ public class Erp extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static JTable table;
 	private static DefaultTableModel tableModel;
+	public final static boolean DEBUG = true;
 
 	private Employe employe;
 	private LinkedList employeList;
@@ -89,14 +93,29 @@ public class Erp extends JFrame {
 		double commission = 0;
 		double sales = 0;
 		double salary = 0;
+		EmployeType employeType = EmployeType.HOURLY_EMPLOYE;
 
 		if (employe instanceof HourlyEmploye) {
 			name = employe.getName();
 			hourlyRate = ((HourlyEmploye) employe).getRate();
 			hours = ((HourlyEmploye) employe).getHours();
-		}
+			employeType = EmployeType.HOURLY_EMPLOYE;
+		}	
+		if (employe instanceof Manager) {
+			name = employe.getName();
+			salary = ((Manager) employe).getSalary();
+			employeType = EmployeType.MANAGER;
+		}	
+		if (employe instanceof Salesman) {
+			name = employe.getName();
+			hourlyRate = ((Salesman) employe).getRate();
+			hours = ((Salesman) employe).getHours();
+			commission = ((Salesman)employe).getCommission();
+			sales = ((Salesman)employe).getSales();
+			employeType = EmployeType.SALESMAN;
+		}	
 
-		DetailDialog editDialog = new DetailDialog(index, name, hourlyRate,
+		DetailDialog editDialog = new DetailDialog(employeType, index, name, hourlyRate,
 				hours, commission, sales, salary);
 		editDialog.setVisible(true);
 
@@ -104,13 +123,17 @@ public class Erp extends JFrame {
 
 			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
 
-			EmployeType employeType = editDialog.getEmployeType();
+			employeType = editDialog.getEmployeType();
 			name = editDialog.getTextFieldName();
 			hours = Double.valueOf(editDialog.getTextFieldHours());
 			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
-
-			Employe newEmploye = employe; // TODO Delete
-											// initialization
+			commission = Double.valueOf(editDialog.getTextFieldCommission());
+			sales = Double.valueOf(editDialog.getTextFieldSales());
+			salary = Double.valueOf(editDialog.getTextFieldSalary());
+			
+			//TODO correct bug with Salesman and hourly rate/ hours
+			
+			Employe newEmploye = new HourlyEmploye();
 
 			switch (employeType) {
 			case HOURLY_EMPLOYE:
@@ -118,9 +141,12 @@ public class Erp extends JFrame {
 				break;
 
 			case SALESMAN:
+				newEmploye = new Salesman(name, hourlyRate, hours, commission,
+						sales);
 				break;
 
 			case MANAGER:
+				newEmploye = new Manager(name, salary);
 				break;
 			}
 
@@ -149,6 +175,9 @@ public class Erp extends JFrame {
 			double hours = Double.valueOf(addDialog.getTextFieldHours());
 			double hourlyRate = Double.valueOf(addDialog
 					.getTextFieldHourlyRate());
+			double commission = Double.valueOf(addDialog.getTextFieldCommission());
+			double sales = Double.valueOf(addDialog.getTextFieldSales());
+			double salary = Double.valueOf(addDialog.getTextFieldSalary());
 
 			EmployeType employeType = addDialog.getEmployeType();
 
@@ -158,9 +187,12 @@ public class Erp extends JFrame {
 				break;
 
 			case SALESMAN:
+				employe = new Salesman(name, hourlyRate, hours, commission,
+						sales);
 				break;
 
 			case MANAGER:
+				employe = new Manager(name, salary);
 				break;
 			}
 
@@ -197,8 +229,22 @@ public class Erp extends JFrame {
 						tableModel.removeRow(0);
 						counter--;
 					}
+					
+					JFileChooser chooser = new JFileChooser();
+				    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Employe database", "erp", "erp");
+				    chooser.setFileFilter(filter);
+				    chooser.setAcceptAllFileFilterUsed(false);
+				    
+				    int returnVal = chooser.showOpenDialog(getContentPane());
+				    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				       System.out.println("You chose to open this file: " +
+				            chooser.getSelectedFile().getName());
+				    }
+				    
+					File file = chooser.getSelectedFile();
 
-					FileInputStream fis = new FileInputStream("C:/list.ser");
+					FileInputStream fis = new FileInputStream(file);
 					ObjectInputStream ois = new ObjectInputStream(fis);
 					employeList = (LinkedList) ois.readObject();
 					ois.close();
@@ -238,7 +284,19 @@ public class Erp extends JFrame {
 		menuSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					File file = new File("C:/list.ser");
+					JFileChooser chooser = new JFileChooser();
+				    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				        "Employe database", "erp", "erp");
+				    chooser.setFileFilter(filter);
+				    chooser.setAcceptAllFileFilterUsed(false);
+				    int returnVal = chooser.showSaveDialog(getContentPane());
+				    if(returnVal == JFileChooser.APPROVE_OPTION) {
+				       System.out.println("You chose to save this file: " +
+				            chooser.getSelectedFile().getName());
+				    }
+				    
+					File file = chooser.getSelectedFile();
+					//TODO check if extension is ERP, otherwise, change it
 					if (!file.exists())
 						file.createNewFile();
 					FileOutputStream fos = new FileOutputStream(file);
@@ -283,22 +341,21 @@ public class Erp extends JFrame {
 				Messages.getString("erp.type.text"),
 				Messages.getString("erp.salary.text") };
 
-		//tableModel = new DefaultTableModel(columnNames, 0);
+		// tableModel = new DefaultTableModel(columnNames, 0);
 		tableModel = new DefaultTableModel(columnNames, 0) {
 
-		    /**
+			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       //all cells false
-		       return false;
-		    }
+			public boolean isCellEditable(int row, int column) {
+				// all cells false
+				return false;
+			}
 		};
-		
-		
+
 		table.setModel(tableModel);
 
 		table.addMouseListener(new MouseAdapter() {

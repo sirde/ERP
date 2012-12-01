@@ -116,27 +116,39 @@ public class LinkedList implements Serializable {
 
 	public void delete(int index) {
 
-		if(index == 0 && firstCell != null)
+		if(index == 1 && firstCell != null)
 		{
 			firstCell = firstCell.next;
 			size--;
+			if(Erp.DEBUG)
+				System.out.println("First cell has been deleted");
 		}
-		
-		Cell a = firstCell;	
-		Cell b = firstCell.next;
-		
-		int i = 1;
-		
-		while (i < index && b.next != null) {
-			a = a.next;
-			b = b.next;
-
-			i++;
-		}
-		if (index == i)
+		else
 		{
-			a.next = a.next.next;
-			size--;
+			Cell previousCell = firstCell;	
+			Cell deletedCell = firstCell.next;
+			
+			int i = 2;
+			
+			while (i < index && deletedCell.next != null) {
+				previousCell = deletedCell;
+				deletedCell = deletedCell.next;
+	
+				i++;
+			}
+			if (index == i)
+			{
+				previousCell.next = deletedCell.next;
+				size--;
+				if(Erp.DEBUG)
+					System.out.println("Cell "+ i + " has been deleted");
+			}
+			else
+			{
+				if(Erp.DEBUG)
+					System.out.println("No cell has been deleted");
+					
+			}
 		}
 		
 	}
