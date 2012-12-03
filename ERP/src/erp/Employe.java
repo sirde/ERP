@@ -22,7 +22,7 @@ public abstract class Employe implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;	
 	private String name;
 	
-	/**
+	/** Constructor without parameter
 	 * 
 	 */
 	public Employe()
@@ -30,6 +30,9 @@ public abstract class Employe implements Serializable, Cloneable {
 		name = "sans name";
 	}
 
+	/** Constructor
+	 * @param theName
+	 */
 	public Employe(String theName)
 	{
 		if(theName == null)
@@ -38,16 +41,25 @@ public abstract class Employe implements Serializable, Cloneable {
 		name = theName;
 	}
 	
+	/** Copy constructor
+	 * @param otherObject
+	 */
 	public Employe(Employe otherObject)
 	{
 		name = otherObject.name;
 	}
 	
+	/**
+	 * @return the name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 	
+	/** Set the name
+	 * @param newName
+	 */
 	public void setName(String newName)
 	{
 		if(newName == null)
@@ -80,6 +92,9 @@ public abstract class Employe implements Serializable, Cloneable {
 		return true;
 	}
 
+	/** abstract method: Has to be emplemented in the derived clases
+	 * @return the pay
+	 */
 	public abstract double getPay();
 	
 

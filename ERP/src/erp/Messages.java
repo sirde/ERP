@@ -4,6 +4,10 @@ import java.beans.Beans;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * @author sirde
+ *
+ */
 public class Messages {
 	////////////////////////////////////////////////////////////////////////////
 	//
@@ -28,6 +32,10 @@ public class Messages {
 	// Strings access
 	//
 	////////////////////////////////////////////////////////////////////////////
+	/**
+	 * @param key
+	 * @return
+	 */
 	public static String getString(String key) {
 		try {
 			ResourceBundle bundle = Beans.isDesignTime() ? loadBundle() : RESOURCE_BUNDLE;

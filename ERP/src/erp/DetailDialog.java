@@ -90,8 +90,8 @@ public class DetailDialog extends JDialog implements ActionListener {
 	}
 
 	/**
-	 * Constructeur utilisé pour éditer un champ
-	 * 
+	 * Constructor used to edit an employe
+	 * @param employeType 
 	 * @param name
 	 * @param id
 	 * @param hourlyRate
@@ -344,46 +344,66 @@ public class DetailDialog extends JDialog implements ActionListener {
 		} // met fin au dialogue et rend la boite invisible.
 	}
 
+	/**
+	 * @return hours
+	 */
 	public String getTextFieldHours() {
 		return textFieldHours.getText();
 	}
 
+	/**
+	 * @return name
+	 */
 	public String getTextFieldName() {
 		return textFieldName.getText();
 	}
 
+	/**
+	 * @return index
+	 */
 	public String getTextFieldID() {
 		return textFieldID.getText();
 	}
 
+	/**
+	 * @return Hourly rate
+	 */
 	public String getTextFieldHourlyRate() {
 		return textFieldHourlyRate.getText();
 	}
 
+	/**
+	 * @return Commission
+	 */
 	public String getTextFieldCommission() {
 		return textFieldCommission.getText();
 	}
 
+	/**
+	 * @return Sales
+	 */
 	public String getTextFieldSales() {
 		return textFieldSales.getText();
 	}
 
+	/**
+	 * @return Salary
+	 */
 	public String getTextFieldSalary() {
 		return textFieldSalary.getText();
 	}
 
+	/**
+	 * @return Employe Type
+	 */
 	public EmployeType getEmployeType() {
 		return employeType;
 	}
 
-	public boolean getTextFieldSalaryEditable() {
-		return textFieldSalary.isEditable();
-	}
 
-	public void setTextFieldSalaryEditable(boolean editable) {
-		textFieldSalary.setEditable(editable);
-	}
-
+	/**
+	 * @return if ok was pressed
+	 */
 	public boolean getOkPressed() {
 		return okPressed;
 	}
