@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ListSelectionModel;
@@ -42,27 +44,27 @@ import javax.swing.ListSelectionModel;
  */
 
 public class Erp extends JFrame {
-	
 
 	/**
 	 * @author sirde
 	 * 
 	 */
-	public enum EmployeType {
+	public enum EmployeType
+	{
 		HOURLY_EMPLOYE, SALESMAN, MANAGER;
 	}
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	private static JTable table;
-	private static DefaultTableModel tableModel;
-	public final static boolean DEBUG = true;
+	private static JTable				table;
+	private static DefaultTableModel	tableModel;
+	public final static boolean			DEBUG				= true;
 
-	private Employe employe;
-	private LinkedList employeList;
-	private JButton btnShow;
+	private Employe						employe;
+	private LinkedList					employeList;
+	private JButton						btnShow;
+	private JFileChooser				chooser;
 
 	/**
 	 * Launch the application.
@@ -100,23 +102,23 @@ public class Erp extends JFrame {
 			hourlyRate = ((HourlyEmploye) employe).getRate();
 			hours = ((HourlyEmploye) employe).getHours();
 			employeType = EmployeType.HOURLY_EMPLOYE;
-		}	
+		}
 		if (employe instanceof Manager) {
 			name = employe.getName();
 			salary = ((Manager) employe).getSalary();
 			employeType = EmployeType.MANAGER;
-		}	
+		}
 		if (employe instanceof Salesman) {
 			name = employe.getName();
 			hourlyRate = ((Salesman) employe).getRate();
 			hours = ((Salesman) employe).getHours();
-			commission = ((Salesman)employe).getCommission();
-			sales = ((Salesman)employe).getSales();
+			commission = ((Salesman) employe).getCommission();
+			sales = ((Salesman) employe).getSales();
 			employeType = EmployeType.SALESMAN;
-		}	
+		}
 
-		DetailDialog editDialog = new DetailDialog(employeType, index, name, hourlyRate,
-				hours, commission, sales, salary);
+		DetailDialog editDialog = new DetailDialog(employeType, index, name,
+				hourlyRate, hours, commission, sales, salary);
 		editDialog.setVisible(true);
 
 		if (editDialog.getOkPressed()) {
@@ -130,9 +132,7 @@ public class Erp extends JFrame {
 			commission = Double.valueOf(editDialog.getTextFieldCommission());
 			sales = Double.valueOf(editDialog.getTextFieldSales());
 			salary = Double.valueOf(editDialog.getTextFieldSalary());
-			
-			//TODO correct bug with Salesman and hourly rate/ hours
-			
+
 			Employe newEmploye = new HourlyEmploye();
 
 			switch (employeType) {
@@ -175,7 +175,8 @@ public class Erp extends JFrame {
 			double hours = Double.valueOf(addDialog.getTextFieldHours());
 			double hourlyRate = Double.valueOf(addDialog
 					.getTextFieldHourlyRate());
-			double commission = Double.valueOf(addDialog.getTextFieldCommission());
+			double commission = Double.valueOf(addDialog
+					.getTextFieldCommission());
 			double sales = Double.valueOf(addDialog.getTextFieldSales());
 			double salary = Double.valueOf(addDialog.getTextFieldSalary());
 
@@ -208,12 +209,20 @@ public class Erp extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Erp() {
+	public Erp()
+	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 567, 588);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+
+		String defaultLocation = getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+
+		chooser = new JFileChooser(defaultLocation);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Employe database", "erp", "erp");
+		chooser.setFileFilter(filter);
+		chooser.setAcceptAllFileFilterUsed(false);
 
 		JMenu mnFile = new JMenu(Messages.getString("Erp.mnFile.text")); //$NON-NLS-1$
 		menuBar.add(mnFile);
@@ -222,56 +231,55 @@ public class Erp extends JFrame {
 				Messages.getString("Erp.mntmOpenFile.text")); //$NON-NLS-1$
 		menuOpenFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
 
-					int counter = employeList.getSize();
-					while (counter > 0) {
-						tableModel.removeRow(0);
-						counter--;
-					}
-					
-					JFileChooser chooser = new JFileChooser();
-				    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Employe database", "erp", "erp");
-				    chooser.setFileFilter(filter);
-				    chooser.setAcceptAllFileFilterUsed(false);
-				    
-				    int returnVal = chooser.showOpenDialog(getContentPane());
-				    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				       System.out.println("You chose to open this file: " +
-				            chooser.getSelectedFile().getName());
-				    }
-				    
+				int returnVal = chooser.showOpenDialog(getContentPane());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					System.out.println("You chose to open this file: " + chooser.getSelectedFile().getPath());
 					File file = chooser.getSelectedFile();
 
-					FileInputStream fis = new FileInputStream(file);
-					ObjectInputStream ois = new ObjectInputStream(fis);
-					employeList = (LinkedList) ois.readObject();
-					ois.close();
+					if (file.exists()) {
+						try {
+							FileInputStream fis = new FileInputStream(file);
+							ObjectInputStream ois = new ObjectInputStream(fis);
+							employeList = (LinkedList) ois.readObject();
+							ois.close();
+						} catch (Exception e) {
+							if (DEBUG)
+								System.out.println("Error while opening the file");
+							e.printStackTrace();
+						}
 
-					int i = 1;
-					while (i <= employeList.getSize()) {
-						employe = employeList.get(i);
-						EmployeType employeType = EmployeType.MANAGER;
+						while (tableModel.getRowCount()> 0) {
+							tableModel.removeRow(0);
+						}
 
-						if (employe instanceof HourlyEmploye)
-							employeType = EmployeType.HOURLY_EMPLOYE;
+						int i = 1;
+						while (i <= employeList.getSize()) {
+							employe = employeList.get(i);
+							EmployeType employeType = EmployeType.MANAGER;
 
-						Object[] data = { i, employe.getName(), employeType,
-								employe.getPay() };
-						tableModel.addRow(data);
-						i++;
+							if (employe instanceof HourlyEmploye)
+								employeType = EmployeType.HOURLY_EMPLOYE;
+							
+							if (employe instanceof Manager)
+								employeType = EmployeType.MANAGER;
+							
+							if (employe instanceof Salesman)
+								employeType = EmployeType.SALESMAN;
+
+							Object[] data = { i, employe.getName(),
+									employeType, employe.getPay() };
+							tableModel.addRow(data);
+							
+							i++;
+						}
+					}
+					else {
+						if(DEBUG)
+							System.out.println("The file does not exist");
+						
 					}
 
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 			}
 		});
@@ -283,34 +291,36 @@ public class Erp extends JFrame {
 
 		menuSaveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					JFileChooser chooser = new JFileChooser();
-				    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				        "Employe database", "erp", "erp");
-				    chooser.setFileFilter(filter);
-				    chooser.setAcceptAllFileFilterUsed(false);
-				    int returnVal = chooser.showSaveDialog(getContentPane());
-				    if(returnVal == JFileChooser.APPROVE_OPTION) {
-				       System.out.println("You chose to save this file: " +
-				            chooser.getSelectedFile().getName());
-				    }
-				    
-					File file = chooser.getSelectedFile();
-					//TODO check if extension is ERP, otherwise, change it
-					if (!file.exists())
-						file.createNewFile();
-					FileOutputStream fos = new FileOutputStream(file);
-					ObjectOutputStream oos = new ObjectOutputStream(fos);
-					oos.writeObject(employeList);
-					oos.close();
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 
+				int returnVal = chooser.showSaveDialog(getContentPane());
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+					File file = chooser.getSelectedFile();
+
+					String fileName = file.getName();
+					int position = fileName.lastIndexOf('.');
+					String extension = "";
+					if(position >= 0)
+						extension = fileName.substring(position + 1);
+
+					if (!extension.equals("erp"))
+						file = new File(file.getPath() + ".erp");
+
+					if (DEBUG)
+						System.out.println("You chose to save this file: " + file.getPath());
+					try {
+						if (!file.exists())
+							file.createNewFile();
+						FileOutputStream fos = new FileOutputStream(file);
+						ObjectOutputStream oos = new ObjectOutputStream(fos);
+						oos.writeObject(employeList);
+						oos.close();
+					} catch (IOException e) {
+						if (DEBUG)
+							System.out.println("Error while saving the file");
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 
@@ -347,7 +357,7 @@ public class Erp extends JFrame {
 			/**
 			 * 
 			 */
-			private static final long serialVersionUID = 1L;
+			private static final long	serialVersionUID	= 1L;
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -396,8 +406,8 @@ public class Erp extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 
 				if (table.getSelectedRows().length != 1)
-					JOptionPane.showMessageDialog(getContentPane(),
-							"Error, you should select 1 line.");
+				JOptionPane.showMessageDialog(getContentPane(),
+						"Error, you should select 1 line.");
 				else {
 					openEditDialog(table.getSelectedRow());
 				}
