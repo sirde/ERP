@@ -212,7 +212,7 @@ public class Erp extends JFrame {
 				int index;
 				while (table.getSelectedRows().length > 0) {
 					selection = table.getSelectedRows();
-					index = ((int) table.getValueAt(selection[0], 0));
+					index = ((int) tableModel.getValueAt(selection[0], 0));
 
 					tableModel.removeRow(selection[0]);
 					employeList.delete(index);
@@ -220,7 +220,7 @@ public class Erp extends JFrame {
 				table.clearSelection();
 
 				for (int i = 0; i < table.getRowCount(); i++) {
-					table.setValueAt(i + 1, i, 0);
+					tableModel.setValueAt(i + 1, i, 0);
 				}
 			}
 		});
@@ -236,7 +236,7 @@ public class Erp extends JFrame {
 	 */
 	private void openEditDialog(int row) {
 
-		int index = (int) table.getValueAt(table.getSelectedRow(), 0);
+		int index = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
 
 		Employe employe = employeList.get(index);
 		String name = employe.getName();
@@ -304,9 +304,9 @@ public class Erp extends JFrame {
 
 			if (!newEmploye.equals(employe)) {
 				employeList.replace(index, newEmploye);
-				table.setValueAt(newEmploye.getName(), index - 1, 1);
-				table.setValueAt(employeType, index - 1, 2);
-				table.setValueAt(newEmploye.getPay(), index - 1, 3);
+				tableModel.setValueAt(newEmploye.getName(), index - 1, 1);
+				tableModel.setValueAt(employeType, index - 1, 2);
+				tableModel.setValueAt(newEmploye.getPay(), index - 1, 3);
 			}
 		}
 	}
