@@ -21,6 +21,8 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.text.NumberFormatter;
 
+import staff.Messages;
+
 import java.awt.Component;
 import java.awt.Dimension;
 

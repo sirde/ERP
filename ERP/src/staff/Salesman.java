@@ -1,7 +1,7 @@
 /**
  * 
  */
-package erp;
+package staff;
 
 import java.io.Serializable;
 

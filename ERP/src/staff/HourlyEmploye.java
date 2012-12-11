@@ -1,4 +1,4 @@
-package erp;
+package staff;
 
 /**
  * @author sirde
@@ -94,7 +94,7 @@ public class HourlyEmploye extends Employe {
 	}
 
 	@Override
-	protected HourlyEmploye clone() {
+	public HourlyEmploye clone() {
 		return new HourlyEmploye(this);
 	}
 

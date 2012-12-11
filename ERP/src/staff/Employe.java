@@ -1,7 +1,7 @@
 /**
  * 
  */
-package erp;
+package staff;
 
 import java.io.Serializable;
 
@@ -98,7 +98,6 @@ public abstract class Employe implements Serializable, Cloneable {
 	public abstract double getPay();
 	
 
-	abstract protected Employe clone();
+	abstract public Employe clone();
 	
-
 }

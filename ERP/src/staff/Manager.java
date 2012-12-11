@@ -1,7 +1,7 @@
 /**
  * 
  */
-package erp;
+package staff;
 
 /**
  * @author C.Gerber
@@ -57,7 +57,7 @@ public class Manager extends Employe {
 	}
 
 	@Override
-	protected Manager clone() {
+	public Manager clone() {
 		return new Manager(this);
 
 	}

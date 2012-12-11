@@ -1,9 +1,13 @@
 /**
  * 
  */
-package erp;
+package utility;
 
 import java.io.Serializable;
+
+import erp.Erp;
+
+import staff.*;
 
 /**
  * @author sirde
