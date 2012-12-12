@@ -13,7 +13,7 @@ import staff.*;
  * @author sirde
  * 
  */
-public class LinkedList implements Serializable {
+public class LinkedList<T_LinkedList> implements Serializable {
 
 	/**
 	 * 
@@ -25,15 +25,15 @@ public class LinkedList implements Serializable {
 	 * Class Cellule interne de la class List
 	 */
 
-	class Cell implements Serializable {
+	class Cell<T_Cell> implements Serializable {
 		/**
 		 * 
 		 */
 		private static final long	serialVersionUID	= 7412202956505489139L;
-		private Employe				content;
-		private Cell				next;
+		private T_Cell				content;
+		private Cell<T_Cell>				next;
 
-		protected Cell(Employe content, Cell next)
+		protected Cell(T_Cell content, Cell<T_Cell> next)
 		{
 			this.content = content;
 			this.next = next;
@@ -45,7 +45,7 @@ public class LinkedList implements Serializable {
 	// Données privées
 	// -----------------------------------------------------------
 
-	private Cell	firstCell;
+	private Cell<T_LinkedList>	firstCell;
 	private int		size;
 
 	// Méthodes publiques
@@ -72,15 +72,15 @@ public class LinkedList implements Serializable {
 	 * 
 	 * @param elem
 	 */
-	public void add(Employe elem) {
-		Cell newCellule = new Cell(elem, null);
+	public void add(T_LinkedList elem) {
+		Cell<T_LinkedList> newCellule = new Cell<>(elem, null);
 
 		if (firstCell == null) {
 			firstCell = newCellule;
 			size++;
 		}
 		else {
-			Cell a = firstCell;
+			Cell<T_LinkedList> a = firstCell;
 
 			while (a.next != null) {
 				a = a.next;
@@ -96,15 +96,15 @@ public class LinkedList implements Serializable {
 	 * @param index
 	 * @return the employee a the chosen index
 	 */
-	public Employe get(int index) {
-		Cell a = firstCell;
+	public T_LinkedList get(int index) {
+		Cell<T_LinkedList> a = firstCell;
 		int i = 1;
 		while (i < index && a.next != null) {
 			a = a.next;
 			i++;
 		}
-
-		if (index == i) return a.content.clone();
+// TODO
+		if (index == i) return (T_LinkedList) a.content.clone();
 		else return null;
 	}
 
@@ -122,8 +122,8 @@ public class LinkedList implements Serializable {
 		}
 		else
 		{
-			Cell previousCell = firstCell;
-			Cell deletedCell = firstCell.next;
+			Cell<T_LinkedList> previousCell = firstCell;
+			Cell<T_LinkedList> deletedCell = firstCell.next;
 
 			int i = 2;
 
@@ -155,9 +155,9 @@ public class LinkedList implements Serializable {
 	 * @param index
 	 * @param elem
 	 */
-	public void replace(int index, Employe elem) {
+	public void replace(int index, T_LinkedList elem) {
 
-		Cell a = firstCell;
+		Cell<T_LinkedList> a = firstCell;
 
 		int i = 1;
 

@@ -138,7 +138,7 @@ public class Erp extends JFrame {
 
 		mnFile.add(menuSaveFile);
 
-		employeList = new LinkedList();
+		employeList = new LinkedList<Employe>();
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -401,7 +401,7 @@ public class Erp extends JFrame {
 				try {
 					FileInputStream fis = new FileInputStream(file);
 					ObjectInputStream ois = new ObjectInputStream(fis);
-					employeList = (LinkedList) ois.readObject();
+					employeList = (LinkedList<Employe>) ois.readObject();
 					ois.close();
 				} catch (Exception e) {
 					if (DEBUG)
