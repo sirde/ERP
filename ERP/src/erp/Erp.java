@@ -32,21 +32,25 @@ import java.io.ObjectOutputStream;
 import java.io.File;
 import javax.swing.ListSelectionModel;
 
+import staff.*;
+import utility.LinkedList;
+
 /**
  * @author sirde
  * 
  */
 
-public class Erp extends JFrame {
+public class Erp extends JFrame
+{
 
 	/**
 	 * Define the default extension of the save file
 	 */
-	public static final String	ERP_EXTENSION	= "erp";
+	public static final String ERP_EXTENSION = "erp";
 	/**
 	 * Define if the debug mode is activated
 	 */
-	public final static boolean	DEBUG			= true;
+	public final static boolean DEBUG = true;
 
 	/**
 	 * @author sirde
@@ -60,31 +64,37 @@ public class Erp extends JFrame {
 	/**
 	 * 
 	 */
-	private static JTable				table;
-	private static DefaultTableModel	tableModel;
+	private static JTable table;
+	private static DefaultTableModel tableModel;
 
-	private LinkedList					employeList;
-	private JButton						btnShow;
-	private JFileChooser				chooser;
-	private JButton						btnAdd;
-	private JButton						btnDelete;
-	private JMenu						mnFile;
-	private JMenuBar					menuBar;
-	private JMenuItem					menuSaveFile;
-	private JScrollPane					pane;
+	private LinkedList<Employe> employeList;
+	private JButton btnShow;
+	private JFileChooser chooser;
+	private JButton btnAdd;
+	private JButton btnDelete;
+	private JMenu mnFile;
+	private JMenuBar menuBar;
+	private JMenuItem menuSaveFile;
+	private JScrollPane pane;
 
 	/**
 	 * Launch the application by opening the main frame
 	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
+	public static void main(String[] args)
+	{
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
 					Erp frame = new Erp();
 					frame.setVisible(true);
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -106,28 +116,36 @@ public class Erp extends JFrame {
 		/*
 		 * Definition of the default saving location and extension
 		 */
-		String defaultLocation = getClass().getProtectionDomain().getCodeSource().getLocation().getFile();
+		String defaultLocation = getClass().getProtectionDomain()
+				.getCodeSource().getLocation().getFile();
 		chooser = new JFileChooser(defaultLocation);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Employe database", ERP_EXTENSION, ERP_EXTENSION);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"Employe database", ERP_EXTENSION, ERP_EXTENSION);
 		chooser.setFileFilter(filter);
 		chooser.setAcceptAllFileFilterUsed(false);
 
 		mnFile = new JMenu(Messages.getString("Erp.mnFile.text"));
 		menuBar.add(mnFile);
 
-		JMenuItem menuOpenFile = new JMenuItem(Messages.getString("Erp.mntmOpenFile.text"));
-		menuOpenFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		JMenuItem menuOpenFile = new JMenuItem(
+				Messages.getString("Erp.mntmOpenFile.text"));
+		menuOpenFile.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				openFile();
 			}
 		});
 
 		mnFile.add(menuOpenFile);
 
-		menuSaveFile = new JMenuItem(Messages.getString("Erp.menuSaveFile.arg0"));
+		menuSaveFile = new JMenuItem(
+				Messages.getString("Erp.menuSaveFile.arg0"));
 
-		menuSaveFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		menuSaveFile.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 
 				saveFile();
 			}
@@ -135,7 +153,7 @@ public class Erp extends JFrame {
 
 		mnFile.add(menuSaveFile);
 
-		employeList = new LinkedList();
+		employeList = new LinkedList<Employe>();
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -144,15 +162,18 @@ public class Erp extends JFrame {
 		pane = new JScrollPane(table);
 		getContentPane().add(pane, BorderLayout.CENTER);
 
-		String[] columnNames = { Messages.getString("erp.index.text"),
+		String[] columnNames =
+		{ Messages.getString("erp.index.text"),
 				Messages.getString("erp.name.text"),
 				Messages.getString("erp.type.text"),
 				Messages.getString("erp.salary.text") };
 
-		tableModel = new DefaultTableModel(columnNames, 0) {
+		tableModel = new DefaultTableModel(columnNames, 0)
+		{
 
 			@Override
-			public boolean isCellEditable(int row, int column) {
+			public boolean isCellEditable(int row, int column)
+			{
 				// all cells false
 				return false;
 			}
@@ -160,9 +181,12 @@ public class Erp extends JFrame {
 
 		table.setModel(tableModel);
 
-		table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
+		table.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2)
+				{
 					JTable target = (JTable) e.getSource();
 					int row = target.getSelectedRow();
 
@@ -173,16 +197,19 @@ public class Erp extends JFrame {
 
 		btnAdd = new JButton(Messages.getString("erp.btnAdd.text"));
 
-		btnAdd.addKeyListener(new KeyAdapter() {
+		btnAdd.addKeyListener(new KeyAdapter()
+		{
 			@Override
-			public void keyTyped(KeyEvent arg0) {
-				if (arg0.getKeyChar() == KeyEvent.VK_ENTER)
-					openAddDialog();
+			public void keyTyped(KeyEvent arg0)
+			{
+				if (arg0.getKeyChar() == KeyEvent.VK_ENTER) openAddDialog();
 			}
 		});
 
-		btnAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnAdd.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 				openAddDialog();
 			}
 		});
@@ -190,12 +217,16 @@ public class Erp extends JFrame {
 		GestionPanel.add(btnAdd);
 
 		btnShow = new JButton(Messages.getString("erp.btnEdit.text"));
-		btnShow.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		btnShow.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 
-				if (table.getSelectedRows().length != 1)
-				JOptionPane.showMessageDialog(getContentPane(), "Error, you should select 1 line.");
-				else {
+				if (table.getSelectedRows().length != 1) JOptionPane
+						.showMessageDialog(getContentPane(),
+								"Error, you should select 1 line.");
+				else
+				{
 					openEditDialog(table.getSelectedRow());
 				}
 			}
@@ -203,14 +234,18 @@ public class Erp extends JFrame {
 		GestionPanel.add(btnShow);
 
 		btnDelete = new JButton(Messages.getString("erp.btnDelete.text"));
-		btnDelete.addMouseListener(new MouseAdapter() {
+		btnDelete.addMouseListener(new MouseAdapter()
+		{
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if (table.getSelectedRows().length < 1)
-					JOptionPane.showMessageDialog(getContentPane(), "Error, you should select at least 1 line.");
+			public void mouseClicked(MouseEvent arg0)
+			{
+				if (table.getSelectedRows().length < 1) JOptionPane
+						.showMessageDialog(getContentPane(),
+								"Error, you should select at least 1 line.");
 				int[] selection;
 				int index;
-				while (table.getSelectedRows().length > 0) {
+				while (table.getSelectedRows().length > 0)
+				{
 					selection = table.getSelectedRows();
 					index = ((int) tableModel.getValueAt(selection[0], 0));
 
@@ -219,7 +254,8 @@ public class Erp extends JFrame {
 				}
 				table.clearSelection();
 
-				for (int i = 0; i < table.getRowCount(); i++) {
+				for (int i = 0; i < table.getRowCount(); i++)
+				{
 					tableModel.setValueAt(i + 1, i, 0);
 				}
 			}
@@ -234,7 +270,8 @@ public class Erp extends JFrame {
 	 * @param row
 	 *            the row to be shown/edited
 	 */
-	private void openEditDialog(int row) {
+	private void openEditDialog(int row)
+	{
 
 		int index = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
 
@@ -247,18 +284,21 @@ public class Erp extends JFrame {
 		double salary = 0;
 		EmployeType employeType = EmployeType.HOURLY_EMPLOYE;
 
-		if (employe instanceof HourlyEmploye) {
+		if (employe instanceof HourlyEmploye)
+		{
 			name = employe.getName();
 			hourlyRate = ((HourlyEmploye) employe).getRate();
 			hours = ((HourlyEmploye) employe).getHours();
 			employeType = EmployeType.HOURLY_EMPLOYE;
 		}
-		if (employe instanceof Manager) {
+		if (employe instanceof Manager)
+		{
 			name = employe.getName();
 			salary = ((Manager) employe).getSalary();
 			employeType = EmployeType.MANAGER;
 		}
-		if (employe instanceof Salesman) {
+		if (employe instanceof Salesman)
+		{
 			name = employe.getName();
 			hourlyRate = ((Salesman) employe).getRate();
 			hours = ((Salesman) employe).getHours();
@@ -268,12 +308,13 @@ public class Erp extends JFrame {
 		}
 
 		// Opens the modal dialog
-		DetailDialog editDialog = new DetailDialog(employeType, index, name, hourlyRate, hours, commission, sales,
-				salary);
+		DetailDialog editDialog = new DetailDialog(employeType, index, name,
+				hourlyRate, hours, commission, sales, salary);
 		editDialog.setVisible(true);
 
 		// Check if the dialog has been exited with ok or exit
-		if (editDialog.getOkPressed()) {
+		if (editDialog.getOkPressed())
+		{
 
 			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
 			employeType = editDialog.getEmployeType();
@@ -286,23 +327,25 @@ public class Erp extends JFrame {
 
 			Employe newEmploye;
 
-			switch (employeType) {
-			case HOURLY_EMPLOYE:
-				newEmploye = new HourlyEmploye(name, hourlyRate, hours);
-				break;
+			switch (employeType)
+			{
+				case HOURLY_EMPLOYE:
+					newEmploye = new HourlyEmploye(name, hourlyRate, hours);
+					break;
 
-			case SALESMAN:
-				newEmploye = new Salesman(name, hourlyRate, hours, commission,
-						sales);
-				break;
+				case SALESMAN:
+					newEmploye = new Salesman(name, hourlyRate, hours,
+							commission, sales);
+					break;
 
-			case MANAGER:
-			default:
-				newEmploye = new Manager(name, salary);
-				break;
+				case MANAGER:
+				default:
+					newEmploye = new Manager(name, salary);
+					break;
 			}
 
-			if (!newEmploye.equals(employe)) {
+			if (!newEmploye.equals(employe))
+			{
 				employeList.replace(index, newEmploye);
 				tableModel.setValueAt(newEmploye.getName(), index - 1, 1);
 				tableModel.setValueAt(employeType, index - 1, 2);
@@ -314,40 +357,47 @@ public class Erp extends JFrame {
 	/**
 	 * Opens the dialog to add a new employee Takes no parameter
 	 */
-	private void openAddDialog() {
+	private void openAddDialog()
+	{
 
 		DetailDialog addDialog = new DetailDialog(employeList.getSize() + 1);
 		addDialog.setVisible(true);
 
 		// Checks if the dialog was exited using OK
-		if (addDialog.getOkPressed()) {
+		if (addDialog.getOkPressed())
+		{
 
 			Employe employe;
 			String name = addDialog.getTextFieldName();
 			double hours = Double.valueOf(addDialog.getTextFieldHours());
-			double hourlyRate = Double.valueOf(addDialog.getTextFieldHourlyRate());
-			double commission = Double.valueOf(addDialog.getTextFieldCommission());
+			double hourlyRate = Double.valueOf(addDialog
+					.getTextFieldHourlyRate());
+			double commission = Double.valueOf(addDialog
+					.getTextFieldCommission());
 			double sales = Double.valueOf(addDialog.getTextFieldSales());
 			double salary = Double.valueOf(addDialog.getTextFieldSalary());
 
 			EmployeType employeType = addDialog.getEmployeType();
 
-			switch (employeType) {
-			case HOURLY_EMPLOYE:
-				employe = new HourlyEmploye(name, hourlyRate, hours);
-				break;
+			switch (employeType)
+			{
+				case HOURLY_EMPLOYE:
+					employe = new HourlyEmploye(name, hourlyRate, hours);
+					break;
 
-			case SALESMAN:
-				employe = new Salesman(name, hourlyRate, hours, commission, sales);
-				break;
+				case SALESMAN:
+					employe = new Salesman(name, hourlyRate, hours, commission,
+							sales);
+					break;
 
-			case MANAGER:
-			default:
-				employe = new Manager(name, salary);
-				break;
+				case MANAGER:
+				default:
+					employe = new Manager(name, salary);
+					break;
 			}
 
-			Object[] data = { employeList.getSize() + 1, name, employeType, employe.getPay() };
+			Object[] data =
+			{ employeList.getSize() + 1, name, employeType, employe.getPay() };
 
 			employeList.add(employe);
 			tableModel.addRow(data);
@@ -358,30 +408,31 @@ public class Erp extends JFrame {
 	private void saveFile()
 	{
 		int returnVal = chooser.showSaveDialog(getContentPane());
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		if (returnVal == JFileChooser.APPROVE_OPTION)
+		{
 			File file = chooser.getSelectedFile();
 
 			String fileName = file.getName();
 			int position = fileName.lastIndexOf('.');
 			String extension = "";
-			if (position >= 0)
-				extension = fileName.substring(position + 1);
+			if (position >= 0) extension = fileName.substring(position + 1);
 
-			if (!extension.equals(ERP_EXTENSION))
-				file = new File(file.getPath() + ".erp");
+			if (!extension.equals(ERP_EXTENSION)) file = new File(
+					file.getPath() + ".erp");
 
-			if (DEBUG)
-				System.out.println("You chose to save this file: " + file.getPath());
-			try {
-				if (!file.exists())
-					file.createNewFile();
+			if (DEBUG) System.out.println("You chose to save this file: "
+					+ file.getPath());
+			try
+			{
+				if (!file.exists()) file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
 				oos.writeObject(employeList);
 				oos.close();
-			} catch (IOException e) {
-				if (DEBUG)
-					System.out.println("Error while saving the file");
+			}
+			catch (IOException e)
+			{
+				if (DEBUG) System.out.println("Error while saving the file");
 				e.printStackTrace();
 			}
 		}
@@ -390,52 +441,57 @@ public class Erp extends JFrame {
 	private void openFile()
 	{
 		int returnVal = chooser.showOpenDialog(getContentPane());
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getPath());
+		if (returnVal == JFileChooser.APPROVE_OPTION)
+		{
+			System.out.println("You chose to open this file: "
+					+ chooser.getSelectedFile().getPath());
 			File file = chooser.getSelectedFile();
 
-			if (file.exists()) {
-				try {
+			if (file.exists())
+			{
+				try
+				{
 					FileInputStream fis = new FileInputStream(file);
 					ObjectInputStream ois = new ObjectInputStream(fis);
-					employeList = (LinkedList) ois.readObject();
+					employeList = (LinkedList<Employe>) ois.readObject();
 					ois.close();
-				} catch (Exception e) {
-					if (DEBUG)
-						System.out.println("Error while opening the file");
+				}
+				catch (Exception e)
+				{
+					if (DEBUG) System.out
+							.println("Error while opening the file");
 					e.printStackTrace();
 					return;
 				}
 
-				while (tableModel.getRowCount() > 0) {
+				while (tableModel.getRowCount() > 0)
+				{
 					tableModel.removeRow(0);
 				}
 
 				int i = 1;
 				Employe employe;
-				while (i <= employeList.getSize()) {
+				while (i <= employeList.getSize())
+				{
 					employe = employeList.get(i);
 					EmployeType employeType = EmployeType.MANAGER;
 
-					if (employe instanceof HourlyEmploye)
-						employeType = EmployeType.HOURLY_EMPLOYE;
+					if (employe instanceof HourlyEmploye) employeType = EmployeType.HOURLY_EMPLOYE;
 
-					if (employe instanceof Manager)
-						employeType = EmployeType.MANAGER;
+					if (employe instanceof Manager) employeType = EmployeType.MANAGER;
 
-					if (employe instanceof Salesman)
-						employeType = EmployeType.SALESMAN;
+					if (employe instanceof Salesman) employeType = EmployeType.SALESMAN;
 
-					Object[] data = { i, employe.getName(),
-							employeType, employe.getPay() };
+					Object[] data =
+					{ i, employe.getName(), employeType, employe.getPay() };
 					tableModel.addRow(data);
 
 					i++;
 				}
 			}
-			else {
-				if (DEBUG)
-					System.out.println("The file does not exist");
+			else
+			{
+				if (DEBUG) System.out.println("The file does not exist");
 			}
 		}
 	}
