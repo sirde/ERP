@@ -21,6 +21,7 @@ public abstract class Employe implements Serializable, Cloneable
 	 */
 
 	private static final long serialVersionUID = 1L;
+	public final static String CLASS_NAME = "Employé";
 	private String name;
 
 	/**
@@ -77,7 +78,7 @@ public abstract class Employe implements Serializable, Cloneable
 
 	public String toString()
 	{
-		return (name);
+		return(name);
 	}
 
 	public boolean equals(Object obj)
@@ -102,5 +103,6 @@ public abstract class Employe implements Serializable, Cloneable
 	public abstract double getPay();
 
 	abstract public Employe clone();
+
 
 }

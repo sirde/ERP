@@ -9,8 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
@@ -36,13 +34,18 @@ import staff.*;
 import utility.LinkedList;
 
 /**
- * @author sirde
+ * @author C.Gerber ERP: means Enterprise resource planning
  * 
  */
 
 public class Erp extends JFrame
 {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1272665389579959888L;
+	
 	/**
 	 * Define the default extension of the save file
 	 */
@@ -52,14 +55,6 @@ public class Erp extends JFrame
 	 */
 	public final static boolean DEBUG = true;
 
-	/**
-	 * @author sirde
-	 * 
-	 */
-	public enum EmployeType
-	{
-		HOURLY_EMPLOYE, SALESMAN, MANAGER;
-	}
 
 	/**
 	 * 
@@ -124,11 +119,10 @@ public class Erp extends JFrame
 		chooser.setFileFilter(filter);
 		chooser.setAcceptAllFileFilterUsed(false);
 
-		mnFile = new JMenu(Messages.getString("Erp.mnFile.text"));
+		mnFile = new JMenu("fichier");
 		menuBar.add(mnFile);
 
-		JMenuItem menuOpenFile = new JMenuItem(
-				Messages.getString("Erp.mntmOpenFile.text"));
+		JMenuItem menuOpenFile = new JMenuItem("Ouvrir Fichier");
 		menuOpenFile.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -139,8 +133,7 @@ public class Erp extends JFrame
 
 		mnFile.add(menuOpenFile);
 
-		menuSaveFile = new JMenuItem(
-				Messages.getString("Erp.menuSaveFile.arg0"));
+		menuSaveFile = new JMenuItem("Sauver fichier");
 
 		menuSaveFile.addActionListener(new ActionListener()
 		{
@@ -163,14 +156,18 @@ public class Erp extends JFrame
 		getContentPane().add(pane, BorderLayout.CENTER);
 
 		String[] columnNames =
-		{ Messages.getString("erp.index.text"),
-				Messages.getString("erp.name.text"),
-				Messages.getString("erp.type.text"),
-				Messages.getString("erp.salary.text") };
+		{ "Index", "nom", "Type", "Salaire" };
 
+		// TableModel used to manage the data in the table
 		tableModel = new DefaultTableModel(columnNames, 0)
 		{
 
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4957135629083872096L;
+
+			// Overrides this method in order to disable the edition of cells
 			@Override
 			public boolean isCellEditable(int row, int column)
 			{
@@ -195,16 +192,7 @@ public class Erp extends JFrame
 			}
 		});
 
-		btnAdd = new JButton(Messages.getString("erp.btnAdd.text"));
-
-		btnAdd.addKeyListener(new KeyAdapter()
-		{
-			@Override
-			public void keyTyped(KeyEvent arg0)
-			{
-				if (arg0.getKeyChar() == KeyEvent.VK_ENTER) openAddDialog();
-			}
-		});
+		btnAdd = new JButton("Ajouter");
 
 		btnAdd.addActionListener(new ActionListener()
 		{
@@ -216,7 +204,7 @@ public class Erp extends JFrame
 
 		GestionPanel.add(btnAdd);
 
-		btnShow = new JButton(Messages.getString("erp.btnEdit.text"));
+		btnShow = new JButton("Editer");
 		btnShow.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -224,7 +212,7 @@ public class Erp extends JFrame
 
 				if (table.getSelectedRows().length != 1) JOptionPane
 						.showMessageDialog(getContentPane(),
-								"Error, you should select 1 line.");
+								"Erreur, il faut sélectionner une ligne");
 				else
 				{
 					openEditDialog(table.getSelectedRow());
@@ -233,7 +221,7 @@ public class Erp extends JFrame
 		});
 		GestionPanel.add(btnShow);
 
-		btnDelete = new JButton(Messages.getString("erp.btnDelete.text"));
+		btnDelete = new JButton("Effacer");
 		btnDelete.addMouseListener(new MouseAdapter()
 		{
 			@Override
@@ -241,7 +229,7 @@ public class Erp extends JFrame
 			{
 				if (table.getSelectedRows().length < 1) JOptionPane
 						.showMessageDialog(getContentPane(),
-								"Error, you should select at least 1 line.");
+								"Erreur, vous devez sélectionner 1 ligne ou plus");
 				int[] selection;
 				int index;
 				while (table.getSelectedRows().length > 0)
@@ -282,20 +270,20 @@ public class Erp extends JFrame
 		double commission = 0;
 		double sales = 0;
 		double salary = 0;
-		EmployeType employeType = EmployeType.HOURLY_EMPLOYE;
+		String employeType = Employe.CLASS_NAME;
 
 		if (employe instanceof HourlyEmploye)
 		{
 			name = employe.getName();
 			hourlyRate = ((HourlyEmploye) employe).getRate();
 			hours = ((HourlyEmploye) employe).getHours();
-			employeType = EmployeType.HOURLY_EMPLOYE;
+			employeType = HourlyEmploye.CLASS_NAME;
 		}
 		if (employe instanceof Manager)
 		{
 			name = employe.getName();
 			salary = ((Manager) employe).getSalary();
-			employeType = EmployeType.MANAGER;
+			employeType = Manager.CLASS_NAME;
 		}
 		if (employe instanceof Salesman)
 		{
@@ -304,7 +292,7 @@ public class Erp extends JFrame
 			hours = ((Salesman) employe).getHours();
 			commission = ((Salesman) employe).getCommission();
 			sales = ((Salesman) employe).getSales();
-			employeType = EmployeType.SALESMAN;
+			employeType = Salesman.CLASS_NAME;
 		}
 
 		// Opens the modal dialog
@@ -329,16 +317,16 @@ public class Erp extends JFrame
 
 			switch (employeType)
 			{
-				case HOURLY_EMPLOYE:
+				case HourlyEmploye.CLASS_NAME:
 					newEmploye = new HourlyEmploye(name, hourlyRate, hours);
 					break;
 
-				case SALESMAN:
+				case Salesman.CLASS_NAME:
 					newEmploye = new Salesman(name, hourlyRate, hours,
 							commission, sales);
 					break;
 
-				case MANAGER:
+				case Manager.CLASS_NAME:
 				default:
 					newEmploye = new Manager(name, salary);
 					break;
@@ -377,20 +365,20 @@ public class Erp extends JFrame
 			double sales = Double.valueOf(addDialog.getTextFieldSales());
 			double salary = Double.valueOf(addDialog.getTextFieldSalary());
 
-			EmployeType employeType = addDialog.getEmployeType();
+			String employeType = addDialog.getEmployeType();
 
 			switch (employeType)
 			{
-				case HOURLY_EMPLOYE:
+				case HourlyEmploye.CLASS_NAME:
 					employe = new HourlyEmploye(name, hourlyRate, hours);
 					break;
 
-				case SALESMAN:
+				case Salesman.CLASS_NAME:
 					employe = new Salesman(name, hourlyRate, hours, commission,
 							sales);
 					break;
 
-				case MANAGER:
+				case Manager.CLASS_NAME:
 				default:
 					employe = new Manager(name, salary);
 					break;
@@ -438,6 +426,7 @@ public class Erp extends JFrame
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void openFile()
 	{
 		int returnVal = chooser.showOpenDialog(getContentPane());
@@ -474,13 +463,13 @@ public class Erp extends JFrame
 				while (i <= employeList.getSize())
 				{
 					employe = employeList.get(i);
-					EmployeType employeType = EmployeType.MANAGER;
+					String employeType = Employe.CLASS_NAME;
 
-					if (employe instanceof HourlyEmploye) employeType = EmployeType.HOURLY_EMPLOYE;
+					if (employe instanceof HourlyEmploye) employeType = HourlyEmploye.CLASS_NAME;
 
-					if (employe instanceof Manager) employeType = EmployeType.MANAGER;
+					if (employe instanceof Manager) employeType = Manager.CLASS_NAME;
 
-					if (employe instanceof Salesman) employeType = EmployeType.SALESMAN;
+					if (employe instanceof Salesman) employeType = Salesman.CLASS_NAME;
 
 					Object[] data =
 					{ i, employe.getName(), employeType, employe.getPay() };

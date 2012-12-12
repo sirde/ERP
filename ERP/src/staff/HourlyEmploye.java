@@ -13,6 +13,7 @@ public class HourlyEmploye extends Employe
 	private static final long serialVersionUID = 4132032299334681517L;
 	static final double DEFAULT_RATE = 0;
 	static final int DEFAULT_HOURS = 0;
+	public final static String CLASS_NAME = "Temporaire";
 
 	private double rate;
 	private double hours;

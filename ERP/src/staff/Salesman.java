@@ -18,6 +18,7 @@ public class Salesman extends HourlyEmploye implements Serializable
 	private static final long serialVersionUID = -7752299715893555100L;
 	private final static double DEFAULT_COMMISSION = 0;
 	private final static double DEFAULT_SALES = 0;
+	public final static String CLASS_NAME = "Vendeur";
 	/**
 	 * 
 	 */

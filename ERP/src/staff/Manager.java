@@ -15,6 +15,7 @@ public class Manager extends Employe
 	 */
 	private static final long serialVersionUID = 2179681792343172157L;
 	private static final double DEFAULT_SALARY = 0;
+	public final static String CLASS_NAME = "Manager";
 
 	private double salary;
 
