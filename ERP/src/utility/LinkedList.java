@@ -7,31 +7,31 @@ import java.io.Serializable;
 
 import erp.Erp;
 
-import staff.*;
-
 /**
  * @author sirde
  * 
  */
-public class LinkedList<T_LinkedList> implements Serializable {
+public class LinkedList<T_LinkedList> implements Serializable
+{
 
 	/**
 	 * 
 	 */
-	private static final long	serialVersionUID	= 607643732520894909L;
+	private static final long serialVersionUID = 607643732520894909L;
 
 	// ----------------------------------------------------------------------------
 	/**
 	 * Class Cellule interne de la class List
 	 */
 
-	class Cell<T_Cell> implements Serializable {
+	class Cell<T_Cell> implements Serializable
+	{
 		/**
 		 * 
 		 */
-		private static final long	serialVersionUID	= 7412202956505489139L;
-		private T_Cell				content;
-		private Cell<T_Cell>				next;
+		private static final long serialVersionUID = 7412202956505489139L;
+		private T_Cell content;
+		private Cell<T_Cell> next;
 
 		protected Cell(T_Cell content, Cell<T_Cell> next)
 		{
@@ -45,8 +45,8 @@ public class LinkedList<T_LinkedList> implements Serializable {
 	// Données privées
 	// -----------------------------------------------------------
 
-	private Cell<T_LinkedList>	firstCell;
-	private int		size;
+	private Cell<T_LinkedList> firstCell;
+	private int size;
 
 	// Méthodes publiques
 	// --------------------------------------------------------
@@ -61,9 +61,11 @@ public class LinkedList<T_LinkedList> implements Serializable {
 
 	/**
 	 * Predicat : Retourne true si la liste est vide, false sinon.
+	 * 
 	 * @return true if the list is empty
 	 */
-	public boolean isEmpty() {
+	public boolean isEmpty()
+	{
 		return (firstCell == null);
 	}
 
@@ -72,17 +74,21 @@ public class LinkedList<T_LinkedList> implements Serializable {
 	 * 
 	 * @param elem
 	 */
-	public void add(T_LinkedList elem) {
+	public void add(T_LinkedList elem)
+	{
 		Cell<T_LinkedList> newCellule = new Cell<>(elem, null);
 
-		if (firstCell == null) {
+		if (firstCell == null)
+		{
 			firstCell = newCellule;
 			size++;
 		}
-		else {
+		else
+		{
 			Cell<T_LinkedList> a = firstCell;
 
-			while (a.next != null) {
+			while (a.next != null)
+			{
 				a = a.next;
 			}
 
@@ -96,29 +102,33 @@ public class LinkedList<T_LinkedList> implements Serializable {
 	 * @param index
 	 * @return the employee a the chosen index
 	 */
-	public T_LinkedList get(int index) {
+	public T_LinkedList get(int index)
+	{
 		Cell<T_LinkedList> a = firstCell;
 		int i = 1;
-		while (i < index && a.next != null) {
+		while (i < index && a.next != null)
+		{
 			a = a.next;
 			i++;
 		}
-// TODO
-		if (index == i) return (T_LinkedList) a.content.clone();
+		// TODO fix private leakage in the following return
+		if (index == i) return a.content;
 		else return null;
 	}
 
-	/** Delete the element at the chosen index
+	/**
+	 * Delete the element at the chosen index
+	 * 
 	 * @param index
 	 */
-	public void delete(int index) {
+	public void delete(int index)
+	{
 
 		if (index == 1 && firstCell != null)
 		{
 			firstCell = firstCell.next;
 			size--;
-			if (Erp.DEBUG)
-				System.out.println("First cell has been deleted");
+			if (Erp.DEBUG) System.out.println("First cell has been deleted");
 		}
 		else
 		{
@@ -127,7 +137,8 @@ public class LinkedList<T_LinkedList> implements Serializable {
 
 			int i = 2;
 
-			while (i < index && deletedCell.next != null) {
+			while (i < index && deletedCell.next != null)
+			{
 				previousCell = deletedCell;
 				deletedCell = deletedCell.next;
 
@@ -137,13 +148,12 @@ public class LinkedList<T_LinkedList> implements Serializable {
 			{
 				previousCell.next = deletedCell.next;
 				size--;
-				if (Erp.DEBUG)
-					System.out.println("Cell " + i + " has been deleted");
+				if (Erp.DEBUG) System.out.println("Cell " + i
+						+ " has been deleted");
 			}
 			else
 			{
-				if (Erp.DEBUG)
-					System.out.println("No cell has been deleted");
+				if (Erp.DEBUG) System.out.println("No cell has been deleted");
 
 			}
 		}
@@ -152,21 +162,23 @@ public class LinkedList<T_LinkedList> implements Serializable {
 
 	/**
 	 * Replace the element at the chosen index
+	 * 
 	 * @param index
 	 * @param elem
 	 */
-	public void replace(int index, T_LinkedList elem) {
+	public void replace(int index, T_LinkedList elem)
+	{
 
 		Cell<T_LinkedList> a = firstCell;
 
 		int i = 1;
 
-		while (index != i && a.next != null) {
+		while (index != i && a.next != null)
+		{
 			a = a.next;
 			i++;
 		}
-		if (index == i)
-			a.content = elem;
+		if (index == i) a.content = elem;
 	}
 
 	/**

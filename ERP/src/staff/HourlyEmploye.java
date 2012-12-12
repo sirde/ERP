@@ -4,7 +4,8 @@ package staff;
  * @author sirde
  * 
  */
-public class HourlyEmploye extends Employe {
+public class HourlyEmploye extends Employe
+{
 
 	/**
 	 * 
@@ -19,35 +20,36 @@ public class HourlyEmploye extends Employe {
 	/**
 	 * 
 	 */
-	public HourlyEmploye() {
+	public HourlyEmploye()
+	{
 		super();
 		rate = DEFAULT_RATE;
 		hours = DEFAULT_HOURS;
 	}
 
 	/**
-	 * @param theName 
-	 * @param theRate 
-	 * @param theHours 
+	 * @param theName
+	 * @param theRate
+	 * @param theHours
 	 * @param leNom
 	 */
-	public HourlyEmploye(String theName, double theRate, double theHours) {
+	public HourlyEmploye(String theName, double theRate, double theHours)
+	{
 		super(theName);
-		if (theRate < 0)
-			theRate = DEFAULT_RATE;
+		if (theRate < 0) theRate = DEFAULT_RATE;
 
-		if (theHours < 0)
-			theHours = DEFAULT_HOURS;
+		if (theHours < 0) theHours = DEFAULT_HOURS;
 
 		rate = theRate;
 		hours = theHours;
 	}
 
 	/**
-	 * @param otherObject 
+	 * @param otherObject
 	 * @param objetACopier
 	 */
-	public HourlyEmploye(HourlyEmploye otherObject) {
+	public HourlyEmploye(HourlyEmploye otherObject)
+	{
 		super(otherObject);
 		rate = otherObject.rate;
 		hours = otherObject.hours;
@@ -56,50 +58,56 @@ public class HourlyEmploye extends Employe {
 	/**
 	 * @return the rate
 	 */
-	public double getRate() {
+	public double getRate()
+	{
 		return rate;
 	}
 
 	/**
 	 * @param rate
 	 */
-	public void setRate(double rate) {
-		if (rate >= 0)
-			this.rate = rate;
+	public void setRate(double rate)
+	{
+		if (rate >= 0) this.rate = rate;
 	}
 
 	/**
 	 * @return the hours
 	 */
-	public double getHours() {
+	public double getHours()
+	{
 		return hours;
 	}
 
 	/**
 	 * @param hours
 	 */
-	public void setHours(int hours) {
+	public void setHours(int hours)
+	{
 
-		if (hours >= 0)
-			this.hours = hours;
+		if (hours >= 0) this.hours = hours;
 	}
 
-	public double getPay() {
+	public double getPay()
+	{
 		return rate * hours;
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return (getName() + "rate" + rate + ", hours=" + hours + "]");
 	}
 
 	@Override
-	public HourlyEmploye clone() {
+	public HourlyEmploye clone()
+	{
 		return new HourlyEmploye(this);
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode()
+	{
 		final int prime = 31;
 		int result = super.hashCode();
 		long temp;
@@ -111,22 +119,17 @@ public class HourlyEmploye extends Employe {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+	public boolean equals(Object obj)
+	{
+		if (this == obj) return true;
+		if (!super.equals(obj)) return false;
+		if (getClass() != obj.getClass()) return false;
 		HourlyEmploye other = (HourlyEmploye) obj;
 		if (Double.doubleToLongBits(hours) != Double
-				.doubleToLongBits(other.hours))
-			return false;
+				.doubleToLongBits(other.hours)) return false;
 		if (Double.doubleToLongBits(rate) != Double
-				.doubleToLongBits(other.rate))
-			return false;
+				.doubleToLongBits(other.rate)) return false;
 		return true;
 	}
-	
-	
+
 }

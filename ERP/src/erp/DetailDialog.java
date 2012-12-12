@@ -30,7 +30,8 @@ import java.awt.Dimension;
  * @author sirde
  * 
  */
-public class DetailDialog extends JDialog implements ActionListener {
+public class DetailDialog extends JDialog implements ActionListener
+{
 
 	/**
 	 * 
@@ -40,7 +41,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 	/**
 	 * 
 	 */
-	
+
 	private JButton okButton; // Composant Swing.
 
 	private JTextField textFieldName;
@@ -86,14 +87,16 @@ public class DetailDialog extends JDialog implements ActionListener {
 	 * @param id
 	 *            The id of the element to add
 	 */
-	public DetailDialog(int id) {
+	public DetailDialog(int id)
+	{
 		this(EmployeType.HOURLY_EMPLOYE, id, "", 0, 0, 0, 0, 0);
-		
+
 	}
 
 	/**
 	 * Constructor used to edit an employe
-	 * @param employeType 
+	 * 
+	 * @param employeType
 	 * @param name
 	 * @param id
 	 * @param hourlyRate
@@ -103,19 +106,20 @@ public class DetailDialog extends JDialog implements ActionListener {
 	 * @param salary
 	 * @wbp.parser.constructor
 	 */
-	public DetailDialog(EmployeType employeType, int id, String name, double hourlyRate, double hours,
-			double commission, double sales, double salary) {
+	public DetailDialog(EmployeType employeType, int id, String name,
+			double hourlyRate, double hours, double commission, double sales,
+			double salary)
+	{
 		super((Frame) null, "Mon dialogue", true);
-		
-		
-		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in javax.swing.text
+
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in
+																		// javax.swing.text
 		numberFormat.setMaximumFractionDigits(2);
 		NumberFormatter nf = new NumberFormatter(numberFormat);
 		nf.setMinimum(0.0);
 		nf.setMaximum(999999999.9);
 		nf.setAllowsInvalid(false);
 
-		
 		setSize(300, 238);
 		setLocationRelativeTo(null);
 
@@ -142,24 +146,24 @@ public class DetailDialog extends JDialog implements ActionListener {
 		comboBoxEmployeType = new JComboBox<String>();
 
 		horizontalBoxEmployeType.add(comboBoxEmployeType);
-		
 
 		comboBoxEmployeType.setToolTipText(Messages
 				.getString("Erp.comboBoxEmployeType.toolTipText")); //$NON-NLS-1$
 		comboBoxEmployeType.setModel(new DefaultComboBoxModel<String>(
-				new String[] { "HourlyEmploye", "Salesman", "Manager" }));
-		
-		
+				new String[]
+				{ "HourlyEmploye", "Salesman", "Manager" }));
+
 		comboBoxEmployeType.setSelectedIndex(employeType.ordinal());
-		
-		comboBoxEmployeType.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+
+		comboBoxEmployeType.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent arg0)
+			{
 
 				updateGUI();
 			}
 
 		});
-		
 
 		horizontalBoxIndex = Box.createHorizontalBox();
 		verticalBoxTextFields.add(horizontalBoxIndex);
@@ -256,7 +260,7 @@ public class DetailDialog extends JDialog implements ActionListener {
 		horizontalBoxHours.add(horizontalStrut_6);
 
 		textFieldHours = new JFormattedTextField(nf);
-		
+
 		horizontalBoxHours.add(textFieldHours);
 		textFieldHours.setToolTipText(Messages
 				.getString("Erp.textFieldHours.toolTipText")); //$NON-NLS-1$
@@ -282,24 +286,18 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 		okButton = new JButton("OK");
 
-		/* Desactivé car créer des lenteurs
-		getContentPane().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (e.getKeyChar() == KeyEvent.VK_ENTER)
-					setVisible(false);
-			}
-		});
-
-		comboBoxEmployeType.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if (e.getKeyChar() == KeyEvent.VK_ENTER)
-					setVisible(false);
-			}
-		});
-		
-		*/
+		/*
+		 * Desactivé car créer des lenteurs getContentPane().addKeyListener(new
+		 * KeyAdapter() {
+		 * 
+		 * @Override public void keyTyped(KeyEvent e) { if (e.getKeyChar() ==
+		 * KeyEvent.VK_ENTER) setVisible(false); } });
+		 * 
+		 * comboBoxEmployeType.addKeyListener(new KeyAdapter() {
+		 * 
+		 * @Override public void keyTyped(KeyEvent e) { if (e.getKeyChar() ==
+		 * KeyEvent.VK_ENTER) setVisible(false); } });
+		 */
 
 		verticalBoxTextFields.add(okButton);
 		okButton.addActionListener(this);
@@ -307,22 +305,28 @@ public class DetailDialog extends JDialog implements ActionListener {
 		updateGUI();
 	}
 
-	private void updateGUI() {
-		if (comboBoxEmployeType.getSelectedItem() == "HourlyEmploye") {
+	private void updateGUI()
+	{
+		if (comboBoxEmployeType.getSelectedItem() == "HourlyEmploye")
+		{
 			horizontalBoxSales.setVisible(false);
 			horizontalBoxCommission.setVisible(false);
 			horizontalBoxHourlyRate.setVisible(true);
 			horizontalBoxHours.setVisible(true);
 			horizontalBoxSalary.setVisible(false);
 			employeType = EmployeType.HOURLY_EMPLOYE;
-		} else if (comboBoxEmployeType.getSelectedItem() == "Salesman") {
+		}
+		else if (comboBoxEmployeType.getSelectedItem() == "Salesman")
+		{
 			horizontalBoxSales.setVisible(true);
 			horizontalBoxCommission.setVisible(true);
 			horizontalBoxHourlyRate.setVisible(true);
 			horizontalBoxHours.setVisible(true);
 			horizontalBoxSalary.setVisible(false);
 			employeType = EmployeType.SALESMAN;
-		} else if (comboBoxEmployeType.getSelectedItem() == "Manager") {
+		}
+		else if (comboBoxEmployeType.getSelectedItem() == "Manager")
+		{
 			horizontalBoxSales.setVisible(false);
 			horizontalBoxCommission.setVisible(false);
 			horizontalBoxHourlyRate.setVisible(false);
@@ -333,10 +337,13 @@ public class DetailDialog extends JDialog implements ActionListener {
 
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == okButton) {
-			if(textFieldName.getText().equals(""))
-				JOptionPane.showMessageDialog(getContentPane(), "Error, a name is required.");
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == okButton)
+		{
+			if (textFieldName.getText().equals("")) JOptionPane
+					.showMessageDialog(getContentPane(),
+							"Error, a name is required.");
 			else
 			{
 				okPressed = true;
@@ -349,64 +356,72 @@ public class DetailDialog extends JDialog implements ActionListener {
 	/**
 	 * @return hours
 	 */
-	public String getTextFieldHours() {
+	public String getTextFieldHours()
+	{
 		return textFieldHours.getText();
 	}
 
 	/**
 	 * @return name
 	 */
-	public String getTextFieldName() {
+	public String getTextFieldName()
+	{
 		return textFieldName.getText();
 	}
 
 	/**
 	 * @return index
 	 */
-	public String getTextFieldID() {
+	public String getTextFieldID()
+	{
 		return textFieldID.getText();
 	}
 
 	/**
 	 * @return Hourly rate
 	 */
-	public String getTextFieldHourlyRate() {
+	public String getTextFieldHourlyRate()
+	{
 		return textFieldHourlyRate.getText();
 	}
 
 	/**
 	 * @return Commission
 	 */
-	public String getTextFieldCommission() {
+	public String getTextFieldCommission()
+	{
 		return textFieldCommission.getText();
 	}
 
 	/**
 	 * @return Sales
 	 */
-	public String getTextFieldSales() {
+	public String getTextFieldSales()
+	{
 		return textFieldSales.getText();
 	}
 
 	/**
 	 * @return Salary
 	 */
-	public String getTextFieldSalary() {
+	public String getTextFieldSalary()
+	{
 		return textFieldSalary.getText();
 	}
 
 	/**
 	 * @return Employe Type
 	 */
-	public EmployeType getEmployeType() {
+	public EmployeType getEmployeType()
+	{
 		return employeType;
 	}
-
 
 	/**
 	 * @return if ok was pressed
 	 */
-	public boolean getOkPressed() {
+	public boolean getOkPressed()
+	{
 		return okPressed;
 	}
 }
