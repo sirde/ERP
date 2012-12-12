@@ -5,39 +5,33 @@ package utility;
 
 import java.io.Serializable;
 
-import erp.Erp;
-
 /**
- * @author sirde
+ * @author C. Gerber & O.Guédat
+ * 
+ * Implémentation de la classe liste chainé générique.
  * 
  */
 public class LinkedList<T_LinkedList> implements Serializable
 {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 607643732520894909L;
 
 	// ----------------------------------------------------------------------------
 	/**
-	 * Class Cellule interne de la class List
+	 * Implémentation d'une classe cellule générique
 	 */
-
-	class Cell<T_Cell> implements Serializable, Cloneable
+	private class Cell<T_Cell> implements Serializable, Cloneable
 	{
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 7412202956505489139L;
 		private T_Cell content;
 		private Cell<T_Cell> next;
 
+		
 		protected Cell(T_Cell content, Cell<T_Cell> next)
 		{
 			this.content = content;
 			this.next = next;
 		}
+		
 		
 		public Cell(Cell<T_Cell> objectToCopy){
 			this.content = objectToCopy.content;
@@ -51,13 +45,13 @@ public class LinkedList<T_LinkedList> implements Serializable
 
 	// ----------------------------------------------------------------------------
 
-	// Donn�es priv�es
+	// Donn�es priv�es
 	// -----------------------------------------------------------
 
 	private Cell<T_LinkedList> firstCell;
 	private int size;
 
-	// M�thodes publiques
+	// M�thodes publiques
 	// --------------------------------------------------------
 	/**
 	 * Constructeur.
@@ -79,7 +73,7 @@ public class LinkedList<T_LinkedList> implements Serializable
 	}
 
 	/**
-	 * Ajoute l'�lement en fin de liste
+	 * Ajoute l'�lement en fin de liste
 	 * 
 	 * @param elem
 	 */
@@ -104,7 +98,6 @@ public class LinkedList<T_LinkedList> implements Serializable
 			a.next = newCellule;
 			size++;
 		}
-
 	}
 
 	/**
@@ -136,7 +129,6 @@ public class LinkedList<T_LinkedList> implements Serializable
 		{
 			firstCell = firstCell.next;
 			size--;
-			if (Erp.DEBUG) System.out.println("First cell has been deleted");
 		}
 		else
 		{
@@ -156,16 +148,8 @@ public class LinkedList<T_LinkedList> implements Serializable
 			{
 				previousCell.next = deletedCell.next;
 				size--;
-				if (Erp.DEBUG) System.out.println("Cell " + i
-						+ " has been deleted");
-			}
-			else
-			{
-				if (Erp.DEBUG) System.out.println("No cell has been deleted");
-
 			}
 		}
-
 	}
 
 	/**
