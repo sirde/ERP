@@ -24,7 +24,7 @@ public class LinkedList<T_LinkedList> implements Serializable
 	 * Class Cellule interne de la class List
 	 */
 
-	class Cell<T_Cell> implements Serializable
+	class Cell<T_Cell> implements Serializable, Cloneable
 	{
 		/**
 		 * 
@@ -37,6 +37,15 @@ public class LinkedList<T_LinkedList> implements Serializable
 		{
 			this.content = content;
 			this.next = next;
+		}
+		
+		public Cell(Cell<T_Cell> objectToCopy){
+			this.content = objectToCopy.content;
+			this.next = objectToCopy.next;
+		}
+		
+		public Cell<T_Cell> clone(){
+			return new Cell<T_Cell>(this);
 		}
 	}
 
@@ -111,8 +120,7 @@ public class LinkedList<T_LinkedList> implements Serializable
 			a = a.next;
 			i++;
 		}
-		// TODO fix private leakage in the following return
-		if (index == i) return a.content;
+		if (index == i) return a.clone().content;
 		else return null;
 	}
 
