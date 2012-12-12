@@ -1,13 +1,14 @@
 /**
  * 
  */
-package erp;
+package staff;
 
 /**
  * @author C.Gerber
  * 
  */
-public class Manager extends Employe {
+public class Manager extends Employe
+{
 
 	/**
 	 * 
@@ -20,7 +21,8 @@ public class Manager extends Employe {
 	/**
 	 * 
 	 */
-	public Manager() {
+	public Manager()
+	{
 		super();
 		salary = DEFAULT_SALARY;
 
@@ -29,7 +31,8 @@ public class Manager extends Employe {
 	/**
 	 * @param theName
 	 */
-	public Manager(String theName) {
+	public Manager(String theName)
+	{
 		super(theName);
 		salary = DEFAULT_SALARY;
 	}
@@ -38,7 +41,8 @@ public class Manager extends Employe {
 	 * @param theName
 	 * @param theSalary
 	 */
-	public Manager(String theName, double theSalary) {
+	public Manager(String theName, double theSalary)
+	{
 		super(theName);
 		salary = theSalary;
 	}
@@ -46,18 +50,21 @@ public class Manager extends Employe {
 	/**
 	 * @param otherObject
 	 */
-	public Manager(Manager otherObject) {
+	public Manager(Manager otherObject)
+	{
 		super(otherObject);
 		salary = otherObject.salary;
 	}
 
 	@Override
-	public double getPay() {
+	public double getPay()
+	{
 		return salary;
 	}
 
 	@Override
-	protected Manager clone() {
+	public Manager clone()
+	{
 		return new Manager(this);
 
 	}
@@ -65,7 +72,8 @@ public class Manager extends Employe {
 	/**
 	 * @return the salary
 	 */
-	public double getSalary() {
+	public double getSalary()
+	{
 		return salary;
 	}
 
@@ -73,22 +81,20 @@ public class Manager extends Employe {
 	 * @param salary
 	 *            the salary to set
 	 */
-	public void setSalary(double salary) {
+	public void setSalary(double salary)
+	{
 		this.salary = salary;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+	public boolean equals(Object obj)
+	{
+		if (this == obj) return true;
+		if (!super.equals(obj)) return false;
+		if (getClass() != obj.getClass()) return false;
 		Manager other = (Manager) obj;
 		if (Double.doubleToLongBits(salary) != Double
-				.doubleToLongBits(other.salary))
-			return false;
+				.doubleToLongBits(other.salary)) return false;
 		return true;
 	}
 
