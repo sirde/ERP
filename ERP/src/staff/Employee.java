@@ -19,6 +19,7 @@ import java.io.Serializable;
  * 
  */
 
+
 public abstract class Employee implements Serializable, Cloneable
 {
 
@@ -27,7 +28,7 @@ public abstract class Employee implements Serializable, Cloneable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	// TODO explain why we define the following constant
 	public final static String CLASS_NAME = "Employé";
 
 	private String name;

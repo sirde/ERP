@@ -17,13 +17,19 @@ public class Manager extends Employee
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	
+	// Define default value for data member;
+	// Although Java set the default value for double primitive type to 0 for
+	// field defined inside a class, it could be useful to define the two
+	//following constants, if for any reason we decide to set a default
+	// value other than 0.
 	private static final double DEFAULT_SALARY = 0;
 	
-	// TODO comment the why we define the following constant
+	// TODO explain why we define the following constant
 	public final static String CLASS_NAME = "Manager";
 
-	private double salary;
+	private double salary;	// monthly salary
 
 	/**
 	 * Default constructor
@@ -59,7 +65,6 @@ public class Manager extends Employee
 	 * Copy constructor
 	 * 
 	 * Precondition : - originalObject must not be null
-	 * PostCondition : - data member are set to the same name than the originalObject
 	 * 
 	 * @param originalObject
 	 */
@@ -95,7 +100,7 @@ public class Manager extends Employee
 	}
 
 	/**
-	 * Getter : return the pay of an manager, which correspond to its salary
+	 * Getter : define the getPay() method to return the pay of an manager, which correspond to its salary
 	 *  
 	 *  @return salary  
 	 */
@@ -119,7 +124,7 @@ public class Manager extends Employee
 
 	/**
 	 * 
-	 * Predicate : redefine equals() method to check if the data members of "this" hourly employee are equal to the
+	 * Predicate : redefine equals() method to check if the data members of "this" manager are equal to the
 	 * one get in parameters
 	 * 
 	 * @return true if data members of both object are equal, else false.

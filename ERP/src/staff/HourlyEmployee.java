@@ -18,17 +18,17 @@ public class HourlyEmployee extends Employee
 
 	// Define default value for data member;
 	// Although Java set the default value for double primitive type to 0 for
-	// field defined inside a class,
-	// it could be useful to define the two following constants, if for any
-	// reason we decide to set a default value other than 0.
+	// field defined inside a class, it could be useful to define the two
+	//following constants, if for any reason we decide to set a default
+	// value other than 0.
 	static final double DEFAULT_RATE = 0;
 	static final int DEFAULT_HOURS = 0;
 
-	// TODO comment the why we define the following constant
+	// TODO explain why we define the following constant
 	public final static String CLASS_NAME = "Temporaire";
 
-	private double wageRate;
-	private double hours;
+	private double wageRate;	// salary per hours
+	private double hours;		// number of hours worked
 
 	/**
 	 * Default constructor
@@ -47,8 +47,8 @@ public class HourlyEmployee extends Employee
 	 * 
 	 * Precondition : 
 	 * - the name must not be null
-	 * - the WageRate must be equal or higher than 0
-	 * - the Hours must be equal or higher than 0
+	 * - the wageRate must be equal or higher than 0
+	 * - the hours must be equal or higher than 0
 	 * 
 	 * @param theName
 	 * @param theWageRate
@@ -71,7 +71,6 @@ public class HourlyEmployee extends Employee
 	 * Copy constructor
 	 * 
 	 * Precondition : - originalObject must not be null
-	 * PostCondition : - data member are set to the same name than the originalObject
 	 * 
 	 * @param originalObject
 	 */
@@ -132,7 +131,7 @@ public class HourlyEmployee extends Employee
 	}
 
 	/**
-	 * Getter : allow to calculate the monthly salary of an employee
+	 * Getter : define the getPay() method to allow to calculate the monthly salary of an employee
 	 *  
 	 *  @return the monthly salary  
 	 */

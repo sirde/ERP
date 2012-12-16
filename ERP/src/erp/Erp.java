@@ -38,6 +38,10 @@ import utility.LinkedList;
  * 
  */
 
+//TODO : fix bug when we enter characters in field dedicated for number !
+// sometimes, the filed for number becomes empty ! it generate many exeption when we press ok...
+//show massage pop-up when entry error or save file when table entry doesn't exist
+
 public class Erp extends JFrame
 {
 
