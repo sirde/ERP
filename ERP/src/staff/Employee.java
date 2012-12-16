@@ -3,11 +3,13 @@
  */
 package staff;
 
+import java.lang.String;
 import java.io.Serializable;
 
 /**
  * 
- * Employee abstract class : This class contain the common data members and
+ * Employee abstract class :
+ * This class contain the common data members and
  * methods for an employee. This class implement the serializable interface to
  * allow its derived class to be easily save and restore to/from a file.
  * It implements the cloneable interface to allow to redefine the clone() method.
@@ -58,7 +60,7 @@ public abstract class Employee implements Serializable, Cloneable
 	 * Precondition : - originalObject must not be null PostCondition : - name
 	 * data member are set to the same name than the originalObject
 	 * 
-	 * @param otherObject
+	 * @param originalObject
 	 */
 	public Employee(Employee originalObject)
 	{
@@ -93,11 +95,12 @@ public abstract class Employee implements Serializable, Cloneable
 	}
 
 	/**
-	 * Getter : return the employee object formated in a string The returned
+	 * Getter : return the employee object formated in a string. The returned
 	 * string contain the employee name data member
 	 * 
 	 * @return name
 	 */
+	@Override
 	public String toString()
 	{
 		return name;
@@ -109,6 +112,7 @@ public abstract class Employee implements Serializable, Cloneable
 	 * 
 	 * @return true if data members of both object are equal, else false.
 	 */
+	@Override
 	public boolean equals(Object otherObject)
 	{
 		// return false if the otherObject is null (rule define by Java doc)
@@ -124,24 +128,34 @@ public abstract class Employee implements Serializable, Cloneable
 			return (name.equals(otherEmployee.name));
 		}
 	}
+	
+	/**
+	 * Redefine the clone() method to allow to do a deep copy of an Employee
+	 *  
+	 *  @return a deep copy of the object how invoke the clone method
+	 */	
+	@Override
+	public Employee clone()
+	{
+		try
+		{
+			return (HourlyEmployee) super.clone(); // invoke the clone method of Object base class
+		}
+		catch(CloneNotSupportedException e)
+		{ 	//This should not happen.
+			return null; //To keep the compiler happy.
+		}
+	}
 
 	// Abstract method
 
 	/**
-	 * abstract method getPay() Must be implemented in derived classes of
+	 * abstract method getPay() must be implemented in derived classes of
 	 * Employee class
 	 * 
 	 * @return the monthly salary of the employee
 	 */
 	public abstract double getPay();
 
-	/**
-	 * abstract method clone() Must be implemented in derived classes of
-	 * Employee class
-	 * 
-	 * @return the a new object which is a copy of the object who invoke this
-	 *         clone method
-	 */
-	public abstract Employee clone();
 
 }

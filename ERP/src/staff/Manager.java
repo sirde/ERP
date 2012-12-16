@@ -63,11 +63,16 @@ public class Manager extends Employee
 		return salary;
 	}
 
+	/**
+	 * Redefine the clone() method to allow to do a deep copy of a Manager instance
+	 *  
+	 *  @return a deep copy of the object how invoke the clone method
+	 */	
 	@Override
 	public Manager clone()
 	{
-		return new Manager(this);
-
+		// No try catch for this invoke of clone method. It will be manage in Employee class.
+		return (Manager)super.clone(); // invoke the clone method of Employee
 	}
 
 	/**

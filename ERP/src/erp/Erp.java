@@ -274,7 +274,7 @@ public class Erp extends JFrame
 		if (employee instanceof HourlyEmployee)
 		{
 			name = employee.getName();
-			hourlyRate = ((HourlyEmployee) employee).getRate();
+			hourlyRate = ((HourlyEmployee) employee).getWageRate();
 			hours = ((HourlyEmployee) employee).getHours();
 			employeeType = HourlyEmployee.CLASS_NAME;
 		}
@@ -287,7 +287,7 @@ public class Erp extends JFrame
 		else if (employee instanceof SalesMan)
 		{
 			name = employee.getName();
-			hourlyRate = ((SalesMan) employee).getRate();
+			hourlyRate = ((SalesMan) employee).getWageRate();
 			hours = ((SalesMan) employee).getHours();
 			commission = ((SalesMan) employee).getCommission();
 			sales = ((SalesMan) employee).getSales();

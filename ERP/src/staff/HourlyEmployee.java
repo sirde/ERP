@@ -1,79 +1,115 @@
 package staff;
 
 /**
- * @author sirde
+ * HourlyEmployee class This class inherit from Employee class. In addition to
+ * the data member defined in Employee class, it contain two more field :
+ * wageRate and hours
  * 
+ * @author C. Gerber & O.Guédat
  */
-public class HourlyEmployee extends Employee
+public class HourlyEmployee extends Employee implements Cloneable
 {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4132032299334681517L;
+	private static final long serialVersionUID = 1L;
+
+	// Define default value for data member;
+	// Although Java set the default value for double primitive type to 0 for
+	// field defined inside a class,
+	// it could be useful to define the two following constants, if for any
+	// reason we decide to set a default value other than 0.
 	static final double DEFAULT_RATE = 0;
 	static final int DEFAULT_HOURS = 0;
+
+	// TODO comment the why we define the following constant
 	public final static String CLASS_NAME = "Temporaire";
 
-	private double rate;
+	private double wageRate;
 	private double hours;
 
 	/**
-	 * 
+	 * Default constructor
 	 */
 	public HourlyEmployee()
 	{
-		super();
-		rate = DEFAULT_RATE;
+		super(); // call default constructor of Employee Class to set the
+					// default name field
+		wageRate = DEFAULT_RATE;
 		hours = DEFAULT_HOURS;
 	}
 
 	/**
+	 * Constructor allowing to fill explicitly all the data member of an
+	 * HourlyEmployee
+	 * 
+	 * Precondition : 
+	 * - the name must not be null
+	 * - the WageRate must be equal or higher than 0
+	 * - the Hours must be equal or higher than 0
+	 * 
 	 * @param theName
-	 * @param theRate
+	 * @param theWageRate
 	 * @param theHours
-	 * @param leNom
 	 */
-	public HourlyEmployee(String theName, double theRate, double theHours)
+	public HourlyEmployee(String theName, double theWageRate, double theHours)
 	{
-		super(theName);
-		if (theRate < 0) theRate = DEFAULT_RATE;
+		// super have to be the first instruction. It will manage the
+		// precondition for theName
+		super(theName); // call default constructor of Employee Class to set the
+						// default name field
 
-		if (theHours < 0) theHours = DEFAULT_HOURS;
+		assert (theWageRate >= 0 && theHours >= 0);
 
-		rate = theRate;
+		wageRate = theWageRate;
 		hours = theHours;
 	}
 
 	/**
-	 * @param otherObject
-	 * @param objetACopier
+	 * Copy constructor
+	 * 
+	 * Precondition : - originalObject must not be null
+	 * PostCondition : - data member are set to the same name than the originalObject
+	 * 
+	 * @param originalObject
 	 */
-	public HourlyEmployee(HourlyEmployee otherObject)
+	public HourlyEmployee(HourlyEmployee originalObject)
 	{
-		super(otherObject);
-		rate = otherObject.rate;
-		hours = otherObject.hours;
+		// Precondition is managed in the copy constructor of Employee class, which is invoke by super
+		super(originalObject);
+		wageRate = originalObject.wageRate;
+		hours = originalObject.hours;
 	}
 
 	/**
-	 * @return the rate
+	 * Getter : allow to get the wage rate
+	 * 
+	 * @return wageRate
 	 */
-	public double getRate()
+	public double getWageRate()
 	{
-		return rate;
+		return wageRate;
 	}
 
 	/**
-	 * @param rate
+	 * Setter : allow to set the wage rate
+	 * 
+	 * Precondition : the rate must be equal or higher than 0
+	 * 
+	 * @param wageRate
 	 */
-	public void setRate(double rate)
+	public void setRate(double wageRate)
 	{
-		if (rate >= 0) this.rate = rate;
+		assert(wageRate >=0);
+		
+		this.wageRate = wageRate;
 	}
 
 	/**
-	 * @return the hours
+	 * Getter : allow to get the working hours
+	 * 
+	 * @return hours
 	 */
 	public double getHours()
 	{
@@ -81,56 +117,77 @@ public class HourlyEmployee extends Employee
 	}
 
 	/**
+	 * Setter : allow to set the working hours
+	 * 
+	 * Precondition : the working hours must be equal or higher than 0
+	 * 
 	 * @param hours
 	 */
 	public void setHours(int hours)
 	{
+		assert(hours >=0);
 
-		if (hours >= 0) this.hours = hours;
+		this.hours = hours;
 	}
 
+	/**
+	 * Getter : allow to calculate the monthly salary of an employee
+	 *  
+	 *  @return the monthly salary  
+	 */
+	@Override
 	public double getPay()
 	{
-		return rate * hours;
+		return wageRate * hours;
 	}
 
+	/**
+	 * Redefine the toStirng method : return the HourlyEmployee object formated in a string.
+	 * The returned string formated contain the employee name, wageRate and hours data members.
+	 *  
+	 *  @return the monthly salary  
+	 */	
 	@Override
 	public String toString()
 	{
-		return (getName() + "rate" + rate + ", hours=" + hours + "]");
+		return (super.toString() + " ; rate" + wageRate + " ; hours=" + hours + "]");
 	}
 
+	/**
+	 * Redefine the clone() method to allow to do a deep copy of an HourlyEmployee instance
+	 *  
+	 *  @return a deep copy of the object how invoke the clone method
+	 */	
 	@Override
 	public HourlyEmployee clone()
 	{
-		return new HourlyEmployee(this);
+		// No try catch for this invoke of clone method. It will be manage in Employee class.
+		return (HourlyEmployee)super.clone(); // invoke the clone method of Employee
 	}
-
+	
+	/**
+	 * 
+	 * Predicate : redefine equal method to check if the data members of "this" hourly employee are equal to the
+	 * one get in parameters
+	 * 
+	 * @return true if data members of both object are equal, else false.
+	 */
 	@Override
-	public int hashCode()
+	public boolean equals(Object otherObject)
 	{
-		final int prime = 31;
-		int result = super.hashCode();
-		long temp;
-		temp = Double.doubleToLongBits(hours);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(rate);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
+		if (!super.equals(otherObject)) return false;
+		else
+		{
+			// If we are here, it means that both object have been created from
+			// the same class.
+			// So, we have to check if data members defined in HourlyEmployee
+			// are equals.
+			// To do that, we have to cast the otherObject to HourlyEmployee
+			// type
+			return (wageRate == ((HourlyEmployee) otherObject).wageRate &&
+					hours == ((HourlyEmployee) otherObject).hours);
+		}
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (this == obj) return true;
-		if (!super.equals(obj)) return false;
-		if (getClass() != obj.getClass()) return false;
-		HourlyEmployee other = (HourlyEmployee) obj;
-		if (Double.doubleToLongBits(hours) != Double
-				.doubleToLongBits(other.hours)) return false;
-		if (Double.doubleToLongBits(rate) != Double
-				.doubleToLongBits(other.rate)) return false;
-		return true;
 	}
 
 }
