@@ -6,8 +6,9 @@ package staff;
  * wageRate and hours
  * 
  * @author C. Gerber & O.Guédat
+ * @version
  */
-public class HourlyEmployee extends Employee implements Cloneable
+public class HourlyEmployee extends Employee
 {
 
 	/**
@@ -156,7 +157,7 @@ public class HourlyEmployee extends Employee implements Cloneable
 	/**
 	 * Redefine the clone() method to allow to do a deep copy of an HourlyEmployee instance
 	 *  
-	 *  @return a deep copy of the object how invoke the clone method
+	 *  @return a deep copy of the object who invoke the clone method
 	 */	
 	@Override
 	public HourlyEmployee clone()
@@ -167,7 +168,7 @@ public class HourlyEmployee extends Employee implements Cloneable
 	
 	/**
 	 * 
-	 * Predicate : redefine equal method to check if the data members of "this" hourly employee are equal to the
+	 * Predicate : redefine equals() method to check if the data members of "this" hourly employee are equal to the
 	 * one get in parameters
 	 * 
 	 * @return true if data members of both object are equal, else false.

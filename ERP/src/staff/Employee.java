@@ -15,6 +15,7 @@ import java.io.Serializable;
  * It implements the cloneable interface to allow to redefine the clone() method.
  * 
  * @author C. Gerber & O.Guédat
+ * @version
  * 
  */
 

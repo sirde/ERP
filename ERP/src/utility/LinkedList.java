@@ -6,9 +6,10 @@ package utility;
 import java.io.Serializable;
 
 /**
- * @author C. Gerber & O.Guédat
- * 
  * Generic Linked List class.
+ * 
+ * @author C. Gerber & O.Guédat
+ * @version 
  * 
  */
 public class LinkedList<T_LinkedList> implements Serializable
