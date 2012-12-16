@@ -8,20 +8,31 @@ import java.io.Serializable;
 /**
  * @author C. Gerber & O.Guédat
  * 
- * Implémentation de la classe liste chainé générique.
+ * Generic Linked List class.
  * 
  */
 public class LinkedList<T_LinkedList> implements Serializable
 {
-	private static final long serialVersionUID = 607643732520894909L;
-
-	// ----------------------------------------------------------------------------
+	// ------------------------------------------------------
+	// Private members
+	
 	/**
-	 * Implémentation d'une classe cellule générique
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Private generic cell class
+	 * This class contain a field of the generic cell type which represent
+	 * the element content by the cell, and a second which is a reference
+	 * to a the next generic cell.
 	 */
 	private class Cell<T_Cell> implements Serializable, Cloneable
 	{
-		private static final long serialVersionUID = 7412202956505489139L;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private T_Cell content;
 		private Cell<T_Cell> next;
 
@@ -31,64 +42,66 @@ public class LinkedList<T_LinkedList> implements Serializable
 			this.content = content;
 			this.next = next;
 		}
-		
-		
-		public Cell(Cell<T_Cell> objectToCopy){
-			this.content = objectToCopy.content;
-			this.next = objectToCopy.next;
-		}
-		
-		public Cell<T_Cell> clone(){
-			return new Cell<T_Cell>(this);
-		}
 	}
 
-	// ----------------------------------------------------------------------------
 
-	// Donn�es priv�es
-	// -----------------------------------------------------------
-
-	private Cell<T_LinkedList> firstCell;
+	private Cell<T_LinkedList> headCell;
 	private int size;
 
-	// M�thodes publiques
-	// --------------------------------------------------------
+	// ------------------------------------------------------
+	// Public members
+
 	/**
-	 * Constructeur.
+	 * Default constructor
 	 */
 	public LinkedList()
 	{
-		firstCell = null;
+		headCell = null;
 		size = 0;
 	}
 
 	/**
-	 * Predicat : Retourne true si la liste est vide, false sinon.
-	 * 
-	 * @return true if the list is empty
+	 * Predicate : check if the list is empty
+	 * @return true if the list is empty, else false.
 	 */
 	public boolean isEmpty()
 	{
-		return (firstCell == null);
+		return (headCell == null);
+	}
+	
+	/**
+	 * Getter : get the size of the list
+	 * @return the number of elements in this list
+	 */
+	public int getSize()
+	{
+		return size;
 	}
 
 	/**
-	 * Ajoute l'�lement en fin de liste
+	 * Mutator : add a new element at the end of the list
 	 * 
-	 * @param elem
+	 * Precondition :
+	 * - element must not be null
+	 * Postcondition :
+	 * - list size field is updated and the list contain the new element at its end
+	 * 
+	 * @param element
 	 */
-	public void add(T_LinkedList elem)
+	public void addAtEnd(T_LinkedList element)
 	{
-		Cell<T_LinkedList> newCellule = new Cell<>(elem, null);
+		assert(element!=null);
+		
+		Cell<T_LinkedList> newCellule = new Cell<>(element, null);
 
-		if (firstCell == null)
+		if (headCell == null)
 		{
-			firstCell = newCellule;
+			headCell = newCellule;
 			size++;
 		}
 		else
 		{
-			Cell<T_LinkedList> a = firstCell;
+			Cell<T_LinkedList> a = headCell;
 
 			while (a.next != null)
 			{
@@ -101,39 +114,59 @@ public class LinkedList<T_LinkedList> implements Serializable
 	}
 
 	/**
-	 * @param index
-	 * @return the element content a the chosen index
+	 * Returns the element at the indexed position in this list.
+	 * 
+	 * Precondition : 	
+	 * - LinkedList is not empty
+	 * - index value must be in the range from 1 to size
+	 * Postcondition :	
+	 * - Due to generic class limitation (we can't create an instance 
+	 * of the generic type in the class), this method return a 
+	 * reference to the indexed element.
+	 * User must be careful with private leakage if the generic type is a mutable class !
+	 * 
+	 * @param index of the element to return  (index range is from 1 to size)
+	 * @return a reference to the element content a the chosen index
 	 */
 	public T_LinkedList get(int index)
 	{
-		Cell<T_LinkedList> a = firstCell;
+		assert(size != 0);							// list must not be empty
+		assert( (index >= 1) && ( index <= size));	// index range must be from 1 to size
+		
+		Cell<T_LinkedList> a = headCell;
 		int i = 1;
 		while (i < index && a.next != null)
 		{
 			a = a.next;
 			i++;
 		}
-		if (index == i) return a.clone().content;
+		if (index == i) return a.content;	// return a reference to content and not a copy due to generic class limitations
 		else return null;
 	}
 
 	/**
-	 * Delete the element at the chosen index
+	 * Delete the element at the indexed position
+	 * 
+	 * Precondition :
+	 * - LinkedList is not empty
+	 * - index value must be in the range from 1 to size
 	 * 
 	 * @param index
 	 */
 	public void delete(int index)
 	{
+		assert(size != 0);							// list must not be empty
+		assert( (index >= 1) && ( index <= size));	// index range must be from 1 to size			
 
-		if (index == 1 && firstCell != null)
+		if (index == 1 && headCell != null)
 		{
-			firstCell = firstCell.next;
+			headCell = headCell.next;
 			size--;
 		}
 		else
 		{
-			Cell<T_LinkedList> previousCell = firstCell;
-			Cell<T_LinkedList> deletedCell = firstCell.next;
+			Cell<T_LinkedList> previousCell = headCell;
+			Cell<T_LinkedList> deletedCell = headCell.next;
 
 			int i = 2;
 
@@ -153,15 +186,23 @@ public class LinkedList<T_LinkedList> implements Serializable
 	}
 
 	/**
-	 * Replace the element at the chosen index
+	 * Replace the indexed element with the new one give in parameter
+	 * 	 * 
+	 * Precondition :
+	 * - LinkedList is not empty
+	 * - index value must be in the range from 1 to size
+	 * - element must not be null
 	 * 
 	 * @param index
-	 * @param elem
+	 * @param element
 	 */
-	public void replace(int index, T_LinkedList elem)
+	public void replace(int index, T_LinkedList element)
 	{
+		assert(size != 0);							// list must not be empty
+		assert((index >= 1) && ( index <= size));	// index range must be from 1 to size
+		assert(element != null);					// element must be null
 
-		Cell<T_LinkedList> a = firstCell;
+		Cell<T_LinkedList> a = headCell;
 
 		int i = 1;
 
@@ -170,14 +211,6 @@ public class LinkedList<T_LinkedList> implements Serializable
 			a = a.next;
 			i++;
 		}
-		if (index == i) a.content = elem;
-	}
-
-	/**
-	 * @return the number of elements
-	 */
-	public int getSize()
-	{
-		return size;
+		if (index == i) a.content = element;
 	}
 }

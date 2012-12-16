@@ -45,7 +45,7 @@ public class Erp extends JFrame
 	 * 
 	 */
 	private static final long serialVersionUID = 1272665389579959888L;
-	
+
 	/**
 	 * Define the default extension of the save file
 	 */
@@ -54,7 +54,6 @@ public class Erp extends JFrame
 	 * Define if the debug mode is activated
 	 */
 	public final static boolean DEBUG = true;
-
 
 	/**
 	 * 
@@ -279,13 +278,13 @@ public class Erp extends JFrame
 			hours = ((HourlyEmployee) employee).getHours();
 			employeeType = HourlyEmployee.CLASS_NAME;
 		}
-		if (employee instanceof Manager)
+		else if (employee instanceof Manager)
 		{
 			name = employee.getName();
 			salary = ((Manager) employee).getSalary();
 			employeeType = Manager.CLASS_NAME;
 		}
-		if (employee instanceof SalesMan)
+		else if (employee instanceof SalesMan)
 		{
 			name = employee.getName();
 			hourlyRate = ((SalesMan) employee).getRate();
@@ -374,8 +373,8 @@ public class Erp extends JFrame
 					break;
 
 				case SalesMan.CLASS_NAME:
-					employee = new SalesMan(name, hourlyRate, hours, commission,
-							sales);
+					employee = new SalesMan(name, hourlyRate, hours,
+							commission, sales);
 					break;
 
 				case Manager.CLASS_NAME:
@@ -387,7 +386,7 @@ public class Erp extends JFrame
 			Object[] data =
 			{ employeeList.getSize() + 1, name, employeeType, employee.getPay() };
 
-			employeeList.add(employee);
+			employeeList.addAtEnd(employee);
 			tableModel.addRow(data);
 		}
 
