@@ -7,7 +7,7 @@ package staff;
  * @author C.Gerber
  * 
  */
-public class Manager extends Employe
+public class Manager extends Employee
 {
 
 	/**

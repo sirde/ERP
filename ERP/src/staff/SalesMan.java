@@ -3,13 +3,11 @@
  */
 package staff;
 
-import java.io.Serializable;
-
 /**
  * @author sirde
  * 
  */
-public class Salesman extends HourlyEmploye implements Serializable
+public class SalesMan extends HourlyEmployee
 {
 
 	/**
@@ -28,7 +26,7 @@ public class Salesman extends HourlyEmploye implements Serializable
 	/**
 	 * 
 	 */
-	public Salesman()
+	public SalesMan()
 	{
 		// TODO Auto-generated constructor stub
 	}
@@ -38,7 +36,7 @@ public class Salesman extends HourlyEmploye implements Serializable
 	 * @param theRate
 	 * @param theHours
 	 */
-	public Salesman(String theName, double theRate, double theHours)
+	public SalesMan(String theName, double theRate, double theHours)
 	{
 		super(theName, theRate, theHours);
 		commission = DEFAULT_COMMISSION;
@@ -52,7 +50,7 @@ public class Salesman extends HourlyEmploye implements Serializable
 	 * @param theCommission
 	 * @param theSales
 	 */
-	public Salesman(String theName, double theRate, double theHours,
+	public SalesMan(String theName, double theRate, double theHours,
 			double theCommission, double theSales)
 	{
 		super(theName, theRate, theHours);
@@ -63,7 +61,7 @@ public class Salesman extends HourlyEmploye implements Serializable
 	/**
 	 * @param otherObject
 	 */
-	public Salesman(Salesman otherObject)
+	public SalesMan(SalesMan otherObject)
 	{
 		super(otherObject);
 		commission = otherObject.commission;
@@ -116,7 +114,7 @@ public class Salesman extends HourlyEmploye implements Serializable
 		if (this == obj) return true;
 		if (!super.equals(obj)) return false;
 		if (getClass() != obj.getClass()) return false;
-		Salesman other = (Salesman) obj;
+		SalesMan other = (SalesMan) obj;
 		if (Double.doubleToLongBits(commission) != Double
 				.doubleToLongBits(other.commission)) return false;
 		if (Double.doubleToLongBits(sales) != Double
@@ -124,9 +122,9 @@ public class Salesman extends HourlyEmploye implements Serializable
 		return true;
 	}
 
-	public Salesman clone()
+	public SalesMan clone()
 	{
-		return new Salesman(this);
+		return new SalesMan(this);
 
 	}
 

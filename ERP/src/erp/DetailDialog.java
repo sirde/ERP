@@ -20,10 +20,10 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.text.NumberFormatter;
 
-import staff.Employe;
-import staff.HourlyEmploye;
+import staff.Employee;
+import staff.HourlyEmployee;
 import staff.Manager;
-import staff.Salesman;
+import staff.SalesMan;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -53,13 +53,13 @@ public class DetailDialog extends JDialog implements ActionListener
 	private JTextField textFieldCommission;
 	private JTextField textFieldSales;
 	private JTextField textFieldSalary;
-	private String employeType;
+	private String employeeType;
 	private Box verticalBoxTextFields;
 	private JLabel labelIndex;
 	private Box verticalBoxLabel;
 	private Box horizontalBoxIndex;
-	private Box horizontalBoxEmployeType;
-	private JLabel labelEmployeType;
+	private Box horizontalBoxEmployeeType;
+	private JLabel labelEmployeeType;
 	private Component horizontalStrut;
 	private Component horizontalStrut_1;
 	private Box horizontalBoxName;
@@ -80,7 +80,7 @@ public class DetailDialog extends JDialog implements ActionListener
 	private JLabel labelHourlyRate;
 	private JLabel labelHours;
 	private Component horizontalStrut_7;
-	private JComboBox<String> comboBoxEmployeType;
+	private JComboBox<String> comboBoxEmployeeType;
 	private boolean okPressed = false;
 
 	/**
@@ -91,14 +91,14 @@ public class DetailDialog extends JDialog implements ActionListener
 	 */
 	public DetailDialog(int id)
 	{
-		this(Employe.CLASS_NAME, id, "", 0, 0, 0, 0, 0);
+		this(Employee.CLASS_NAME, id, "", 0, 0, 0, 0, 0);
 
 	}
 
 	/**
-	 * Constructor used to edit an employe
+	 * Constructor used to edit an employee
 	 * 
-	 * @param employeType
+	 * @param employeeType
 	 * @param name
 	 * @param id
 	 * @param hourlyRate
@@ -108,7 +108,7 @@ public class DetailDialog extends JDialog implements ActionListener
 	 * @param salary
 	 * @wbp.parser.constructor
 	 */
-	public DetailDialog(String employeType, int id, String name,
+	public DetailDialog(String employeeType, int id, String name,
 			double hourlyRate, double hours, double commission, double sales,
 			double salary)
 	{
@@ -134,27 +134,27 @@ public class DetailDialog extends JDialog implements ActionListener
 		verticalBoxTextFields = Box.createVerticalBox();
 		getContentPane().add(verticalBoxTextFields);
 
-		horizontalBoxEmployeType = Box.createHorizontalBox();
-		verticalBoxTextFields.add(horizontalBoxEmployeType);
+		horizontalBoxEmployeeType = Box.createHorizontalBox();
+		verticalBoxTextFields.add(horizontalBoxEmployeeType);
 
-		labelEmployeType = new JLabel("Type d'employé");
-		labelEmployeType.setPreferredSize(new Dimension(100, 20));
-		horizontalBoxEmployeType.add(labelEmployeType);
+		labelEmployeeType = new JLabel("Type d'employé");
+		labelEmployeeType.setPreferredSize(new Dimension(100, 20));
+		horizontalBoxEmployeeType.add(labelEmployeeType);
 
 		horizontalStrut_1 = Box.createHorizontalStrut(20);
-		horizontalBoxEmployeType.add(horizontalStrut_1);
+		horizontalBoxEmployeeType.add(horizontalStrut_1);
 
-		comboBoxEmployeType = new JComboBox<String>();
+		comboBoxEmployeeType = new JComboBox<String>();
 
-		horizontalBoxEmployeType.add(comboBoxEmployeType);
+		horizontalBoxEmployeeType.add(comboBoxEmployeeType);
 
-		comboBoxEmployeType.setModel(new DefaultComboBoxModel<String>(
+		comboBoxEmployeeType.setModel(new DefaultComboBoxModel<String>(
 				new String[]
-				{ HourlyEmploye.CLASS_NAME, Salesman.CLASS_NAME, Manager.CLASS_NAME }));
+				{ HourlyEmployee.CLASS_NAME, SalesMan.CLASS_NAME, Manager.CLASS_NAME }));
 
-		comboBoxEmployeType.setSelectedItem(employeType);
+		comboBoxEmployeeType.setSelectedItem(employeeType);
 
-		comboBoxEmployeType.addActionListener(new ActionListener()
+		comboBoxEmployeeType.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -279,32 +279,32 @@ public class DetailDialog extends JDialog implements ActionListener
 
 	private void updateGUI()
 	{
-		if (comboBoxEmployeType.getSelectedItem() == HourlyEmploye.CLASS_NAME)
+		if (comboBoxEmployeeType.getSelectedItem() == HourlyEmployee.CLASS_NAME)
 		{
 			horizontalBoxSales.setVisible(false);
 			horizontalBoxCommission.setVisible(false);
 			horizontalBoxHourlyRate.setVisible(true);
 			horizontalBoxHours.setVisible(true);
 			horizontalBoxSalary.setVisible(false);
-			employeType = HourlyEmploye.CLASS_NAME;
+			employeeType = HourlyEmployee.CLASS_NAME;
 		}
-		else if (comboBoxEmployeType.getSelectedItem() == Salesman.CLASS_NAME)
+		else if (comboBoxEmployeeType.getSelectedItem() == SalesMan.CLASS_NAME)
 		{
 			horizontalBoxSales.setVisible(true);
 			horizontalBoxCommission.setVisible(true);
 			horizontalBoxHourlyRate.setVisible(true);
 			horizontalBoxHours.setVisible(true);
 			horizontalBoxSalary.setVisible(false);
-			employeType = Salesman.CLASS_NAME;
+			employeeType = SalesMan.CLASS_NAME;
 		}
-		else if (comboBoxEmployeType.getSelectedItem() == Manager.CLASS_NAME)
+		else if (comboBoxEmployeeType.getSelectedItem() == Manager.CLASS_NAME)
 		{
 			horizontalBoxSales.setVisible(false);
 			horizontalBoxCommission.setVisible(false);
 			horizontalBoxHourlyRate.setVisible(false);
 			horizontalBoxHours.setVisible(false);
 			horizontalBoxSalary.setVisible(true);
-			employeType = Manager.CLASS_NAME;
+			employeeType = Manager.CLASS_NAME;
 		}
 
 	}
@@ -382,11 +382,11 @@ public class DetailDialog extends JDialog implements ActionListener
 	}
 
 	/**
-	 * @return Employe Type
+	 * @return Employee Type
 	 */
-	public String getEmployeType()
+	public String getEmployeeType()
 	{
-		return employeType;
+		return employeeType;
 	}
 
 	/**

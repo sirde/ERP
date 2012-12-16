@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 // TODO include assert function and add a lot of comment ;)
 
-public abstract class Employe implements Serializable, Cloneable
+public abstract class Employee implements Serializable, Cloneable
 {
 
 	/**
@@ -28,7 +28,7 @@ public abstract class Employe implements Serializable, Cloneable
 	 * Constructor without parameter
 	 * 
 	 */
-	public Employe()
+	public Employee()
 	{
 		name = "sans name";
 	}
@@ -38,7 +38,7 @@ public abstract class Employe implements Serializable, Cloneable
 	 * 
 	 * @param theName
 	 */
-	public Employe(String theName)
+	public Employee(String theName)
 	{
 		if (theName == null) theName = "sans name";
 
@@ -50,7 +50,7 @@ public abstract class Employe implements Serializable, Cloneable
 	 * 
 	 * @param otherObject
 	 */
-	public Employe(Employe otherObject)
+	public Employee(Employee otherObject)
 	{
 		name = otherObject.name;
 	}
@@ -86,7 +86,7 @@ public abstract class Employe implements Serializable, Cloneable
 		if (this == obj) return true;
 		if (obj == null) return false;
 		if (getClass() != obj.getClass()) return false;
-		Employe other = (Employe) obj;
+		Employee other = (Employee) obj;
 		if (name == null)
 		{
 			if (other.name != null) return false;
@@ -102,7 +102,7 @@ public abstract class Employe implements Serializable, Cloneable
 	 */
 	public abstract double getPay();
 
-	abstract public Employe clone();
+	abstract public Employee clone();
 
 
 }

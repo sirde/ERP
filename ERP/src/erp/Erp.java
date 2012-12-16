@@ -62,7 +62,7 @@ public class Erp extends JFrame
 	private static JTable table;
 	private static DefaultTableModel tableModel;
 
-	private LinkedList<Employe> employeList;
+	private LinkedList<Employee> employeeList;
 	private JButton btnShow;
 	private JFileChooser chooser;
 	private JButton btnAdd;
@@ -115,7 +115,7 @@ public class Erp extends JFrame
 				.getCodeSource().getLocation().getFile();
 		chooser = new JFileChooser(defaultLocation);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"Employe database", ERP_EXTENSION, ERP_EXTENSION);
+				"Employee database", ERP_EXTENSION, ERP_EXTENSION);
 		chooser.setFileFilter(filter);
 		chooser.setAcceptAllFileFilterUsed(false);
 
@@ -146,7 +146,7 @@ public class Erp extends JFrame
 
 		mnFile.add(menuSaveFile);
 
-		employeList = new LinkedList<Employe>();
+		employeeList = new LinkedList<Employee>();
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -238,7 +238,7 @@ public class Erp extends JFrame
 					index = ((int) tableModel.getValueAt(selection[0], 0));
 
 					tableModel.removeRow(selection[0]);
-					employeList.delete(index);
+					employeeList.delete(index);
 				}
 				table.clearSelection();
 
@@ -263,40 +263,40 @@ public class Erp extends JFrame
 
 		int index = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
 
-		Employe employe = employeList.get(index);
-		String name = employe.getName();
+		Employee employee = employeeList.get(index);
+		String name = employee.getName();
 		double hourlyRate = 0;
 		double hours = 0;
 		double commission = 0;
 		double sales = 0;
 		double salary = 0;
-		String employeType = Employe.CLASS_NAME;
+		String employeeType = Employee.CLASS_NAME;
 
-		if (employe instanceof HourlyEmploye)
+		if (employee instanceof HourlyEmployee)
 		{
-			name = employe.getName();
-			hourlyRate = ((HourlyEmploye) employe).getRate();
-			hours = ((HourlyEmploye) employe).getHours();
-			employeType = HourlyEmploye.CLASS_NAME;
+			name = employee.getName();
+			hourlyRate = ((HourlyEmployee) employee).getRate();
+			hours = ((HourlyEmployee) employee).getHours();
+			employeeType = HourlyEmployee.CLASS_NAME;
 		}
-		if (employe instanceof Manager)
+		if (employee instanceof Manager)
 		{
-			name = employe.getName();
-			salary = ((Manager) employe).getSalary();
-			employeType = Manager.CLASS_NAME;
+			name = employee.getName();
+			salary = ((Manager) employee).getSalary();
+			employeeType = Manager.CLASS_NAME;
 		}
-		if (employe instanceof Salesman)
+		if (employee instanceof SalesMan)
 		{
-			name = employe.getName();
-			hourlyRate = ((Salesman) employe).getRate();
-			hours = ((Salesman) employe).getHours();
-			commission = ((Salesman) employe).getCommission();
-			sales = ((Salesman) employe).getSales();
-			employeType = Salesman.CLASS_NAME;
+			name = employee.getName();
+			hourlyRate = ((SalesMan) employee).getRate();
+			hours = ((SalesMan) employee).getHours();
+			commission = ((SalesMan) employee).getCommission();
+			sales = ((SalesMan) employee).getSales();
+			employeeType = SalesMan.CLASS_NAME;
 		}
 
 		// Opens the modal dialog
-		DetailDialog editDialog = new DetailDialog(employeType, index, name,
+		DetailDialog editDialog = new DetailDialog(employeeType, index, name,
 				hourlyRate, hours, commission, sales, salary);
 		editDialog.setVisible(true);
 
@@ -305,7 +305,7 @@ public class Erp extends JFrame
 		{
 
 			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
-			employeType = editDialog.getEmployeType();
+			employeeType = editDialog.getEmployeeType();
 			name = editDialog.getTextFieldName();
 			hours = Double.valueOf(editDialog.getTextFieldHours());
 			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
@@ -313,31 +313,31 @@ public class Erp extends JFrame
 			sales = Double.valueOf(editDialog.getTextFieldSales());
 			salary = Double.valueOf(editDialog.getTextFieldSalary());
 
-			Employe newEmploye;
+			Employee newEmployee;
 
-			switch (employeType)
+			switch (employeeType)
 			{
-				case HourlyEmploye.CLASS_NAME:
-					newEmploye = new HourlyEmploye(name, hourlyRate, hours);
+				case HourlyEmployee.CLASS_NAME:
+					newEmployee = new HourlyEmployee(name, hourlyRate, hours);
 					break;
 
-				case Salesman.CLASS_NAME:
-					newEmploye = new Salesman(name, hourlyRate, hours,
+				case SalesMan.CLASS_NAME:
+					newEmployee = new SalesMan(name, hourlyRate, hours,
 							commission, sales);
 					break;
 
 				case Manager.CLASS_NAME:
 				default:
-					newEmploye = new Manager(name, salary);
+					newEmployee = new Manager(name, salary);
 					break;
 			}
 
-			if (!newEmploye.equals(employe))
+			if (!newEmployee.equals(employee))
 			{
-				employeList.replace(index, newEmploye);
-				tableModel.setValueAt(newEmploye.getName(), index - 1, 1);
-				tableModel.setValueAt(employeType, index - 1, 2);
-				tableModel.setValueAt(newEmploye.getPay(), index - 1, 3);
+				employeeList.replace(index, newEmployee);
+				tableModel.setValueAt(newEmployee.getName(), index - 1, 1);
+				tableModel.setValueAt(employeeType, index - 1, 2);
+				tableModel.setValueAt(newEmployee.getPay(), index - 1, 3);
 			}
 		}
 	}
@@ -348,14 +348,14 @@ public class Erp extends JFrame
 	private void openAddDialog()
 	{
 
-		DetailDialog addDialog = new DetailDialog(employeList.getSize() + 1);
+		DetailDialog addDialog = new DetailDialog(employeeList.getSize() + 1);
 		addDialog.setVisible(true);
 
 		// Checks if the dialog was exited using OK
 		if (addDialog.getOkPressed())
 		{
 
-			Employe employe;
+			Employee employee;
 			String name = addDialog.getTextFieldName();
 			double hours = Double.valueOf(addDialog.getTextFieldHours());
 			double hourlyRate = Double.valueOf(addDialog
@@ -365,29 +365,29 @@ public class Erp extends JFrame
 			double sales = Double.valueOf(addDialog.getTextFieldSales());
 			double salary = Double.valueOf(addDialog.getTextFieldSalary());
 
-			String employeType = addDialog.getEmployeType();
+			String employeeType = addDialog.getEmployeeType();
 
-			switch (employeType)
+			switch (employeeType)
 			{
-				case HourlyEmploye.CLASS_NAME:
-					employe = new HourlyEmploye(name, hourlyRate, hours);
+				case HourlyEmployee.CLASS_NAME:
+					employee = new HourlyEmployee(name, hourlyRate, hours);
 					break;
 
-				case Salesman.CLASS_NAME:
-					employe = new Salesman(name, hourlyRate, hours, commission,
+				case SalesMan.CLASS_NAME:
+					employee = new SalesMan(name, hourlyRate, hours, commission,
 							sales);
 					break;
 
 				case Manager.CLASS_NAME:
 				default:
-					employe = new Manager(name, salary);
+					employee = new Manager(name, salary);
 					break;
 			}
 
 			Object[] data =
-			{ employeList.getSize() + 1, name, employeType, employe.getPay() };
+			{ employeeList.getSize() + 1, name, employeeType, employee.getPay() };
 
-			employeList.add(employe);
+			employeeList.add(employee);
 			tableModel.addRow(data);
 		}
 
@@ -415,7 +415,7 @@ public class Erp extends JFrame
 				if (!file.exists()) file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				oos.writeObject(employeList);
+				oos.writeObject(employeeList);
 				oos.close();
 			}
 			catch (IOException e)
@@ -442,7 +442,7 @@ public class Erp extends JFrame
 				{
 					FileInputStream fis = new FileInputStream(file);
 					ObjectInputStream ois = new ObjectInputStream(fis);
-					employeList = (LinkedList<Employe>) ois.readObject();
+					employeeList = (LinkedList<Employee>) ois.readObject();
 					ois.close();
 				}
 				catch (Exception e)
@@ -459,20 +459,20 @@ public class Erp extends JFrame
 				}
 
 				int i = 1;
-				Employe employe;
-				while (i <= employeList.getSize())
+				Employee employee;
+				while (i <= employeeList.getSize())
 				{
-					employe = employeList.get(i);
-					String employeType = Employe.CLASS_NAME;
+					employee = employeeList.get(i);
+					String employeeType = Employee.CLASS_NAME;
 
-					if (employe instanceof HourlyEmploye) employeType = HourlyEmploye.CLASS_NAME;
+					if (employee instanceof HourlyEmployee) employeeType = HourlyEmployee.CLASS_NAME;
 
-					if (employe instanceof Manager) employeType = Manager.CLASS_NAME;
+					if (employee instanceof Manager) employeeType = Manager.CLASS_NAME;
 
-					if (employe instanceof Salesman) employeType = Salesman.CLASS_NAME;
+					if (employee instanceof SalesMan) employeeType = SalesMan.CLASS_NAME;
 
 					Object[] data =
-					{ i, employe.getName(), employeType, employe.getPay() };
+					{ i, employee.getName(), employeeType, employee.getPay() };
 					tableModel.addRow(data);
 
 					i++;

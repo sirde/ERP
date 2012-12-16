@@ -102,7 +102,7 @@ public class LinkedList<T_LinkedList> implements Serializable
 
 	/**
 	 * @param index
-	 * @return the employee a the chosen index
+	 * @return the element content a the chosen index
 	 */
 	public T_LinkedList get(int index)
 	{

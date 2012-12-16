@@ -4,7 +4,7 @@ package staff;
  * @author sirde
  * 
  */
-public class HourlyEmploye extends Employe
+public class HourlyEmployee extends Employee
 {
 
 	/**
@@ -21,7 +21,7 @@ public class HourlyEmploye extends Employe
 	/**
 	 * 
 	 */
-	public HourlyEmploye()
+	public HourlyEmployee()
 	{
 		super();
 		rate = DEFAULT_RATE;
@@ -34,7 +34,7 @@ public class HourlyEmploye extends Employe
 	 * @param theHours
 	 * @param leNom
 	 */
-	public HourlyEmploye(String theName, double theRate, double theHours)
+	public HourlyEmployee(String theName, double theRate, double theHours)
 	{
 		super(theName);
 		if (theRate < 0) theRate = DEFAULT_RATE;
@@ -49,7 +49,7 @@ public class HourlyEmploye extends Employe
 	 * @param otherObject
 	 * @param objetACopier
 	 */
-	public HourlyEmploye(HourlyEmploye otherObject)
+	public HourlyEmployee(HourlyEmployee otherObject)
 	{
 		super(otherObject);
 		rate = otherObject.rate;
@@ -101,9 +101,9 @@ public class HourlyEmploye extends Employe
 	}
 
 	@Override
-	public HourlyEmploye clone()
+	public HourlyEmployee clone()
 	{
-		return new HourlyEmploye(this);
+		return new HourlyEmployee(this);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class HourlyEmploye extends Employe
 		if (this == obj) return true;
 		if (!super.equals(obj)) return false;
 		if (getClass() != obj.getClass()) return false;
-		HourlyEmploye other = (HourlyEmploye) obj;
+		HourlyEmployee other = (HourlyEmployee) obj;
 		if (Double.doubleToLongBits(hours) != Double
 				.doubleToLongBits(other.hours)) return false;
 		if (Double.doubleToLongBits(rate) != Double
