@@ -101,6 +101,8 @@ public class Erp extends JFrame
 
 	public Erp()
 	{
+		setMinimumSize(new Dimension(300, 300));
+		getContentPane().setMinimumSize(new Dimension(150, 150));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 567, 588);
 

@@ -118,13 +118,16 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	{
 		super((Frame) null, "Mon dialogue", true);
 
-		// use a NumberFormat and NumberFormatter object to force the user to fill only valid number in JtextField
+		// use a NumberFormat and NumberFormatter object to force the user to
+		// fill only valid number in JtextField
 		// dedicated for numbers
-		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in javax.swing.text
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in
+																		// javax.swing.text
 		numberFormat.setMaximumFractionDigits(2);
+		numberFormat.setGroupingUsed(false);
 		NumberFormatter nf = new NumberFormatter(numberFormat);
 		nf.setMinimum(0.0);
-		nf.setMaximum(999999999.9);
+		nf.setMaximum(999999.9);
 		nf.setAllowsInvalid(false);
 
 		setSize(300, 238);
@@ -286,14 +289,17 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 		updateGUI();
 	}
 
-	// this private method manage the field to show depending on the kind of employee selected in the comboBoxEmployeeType
+	// this private method manage the field to show depending on the kind of
+	// employee selected in the comboBoxEmployeeType
 	private void updateGUI()
 	{
-		// Use the benefit of the new functionality in Java 7 (-> String in switch statement) ;-)
-		// We enable/disable the different field corresponding to the type of employee selected
-		switch((String)comboBoxEmployeeType.getSelectedItem())
+		// Use the benefit of the new functionality in Java 7 (-> String in
+		// switch statement) ;-)
+		// We enable/disable the different field corresponding to the type of
+		// employee selected
+		switch ((String) comboBoxEmployeeType.getSelectedItem())
 		{
-			case HourlyEmployee.CLASS_NAME :
+			case HourlyEmployee.CLASS_NAME:
 				horizontalBoxSales.setVisible(false);
 				horizontalBoxCommission.setVisible(false);
 				horizontalBoxHourlyRate.setVisible(true);
@@ -301,8 +307,8 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 				horizontalBoxSalary.setVisible(false);
 				employeeType = HourlyEmployee.CLASS_NAME;
 				break;
-				
-			case SalesMan.CLASS_NAME :
+
+			case SalesMan.CLASS_NAME:
 				horizontalBoxSales.setVisible(true);
 				horizontalBoxCommission.setVisible(true);
 				horizontalBoxHourlyRate.setVisible(true);
@@ -310,7 +316,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 				horizontalBoxSalary.setVisible(false);
 				employeeType = SalesMan.CLASS_NAME;
 				break;
-			case Manager.CLASS_NAME :
+			case Manager.CLASS_NAME:
 				horizontalBoxSales.setVisible(false);
 				horizontalBoxCommission.setVisible(false);
 				horizontalBoxHourlyRate.setVisible(false);
@@ -318,10 +324,11 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 				horizontalBoxSalary.setVisible(true);
 				employeeType = Manager.CLASS_NAME;
 				break;
-			default : assert(false); // should never occur !
+			default:
+				assert (false); // should never occur !
 		}
 	}
-	
+
 	/**
 	 * @param event
 	 */
@@ -329,23 +336,26 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	{
 		if (e.getSource() == okButton)
 		{
-			// Check if name doesn't exist and show 
+			// Check if name doesn't exist and show
 			// a dialog box to inform the user the fill it if it's the case
 			// else hide the AddModifyEmployeeDialog and go back to erp JFrame
-			//
+
+			if (textFieldName.getText().equals(""))
+				JOptionPane.showMessageDialog(this, "Please enter a name", "Warning",
+							JOptionPane.WARNING_MESSAGE);
 			
-			/*
-			private JTextField textFieldName;
-			private JTextField textFieldID;
-			private JTextField textFieldHourlyRate;
-			private JTextField textFieldHours;
-			private JTextField textFieldCommission;
-			private JTextField textFieldSales;
-			private JTextField textFieldSalary;
-			*/
+			//If a value is empty, this means it is interpreted as a 0
+			if(textFieldCommission.getText().isEmpty())
+				textFieldCommission.setText("0");
+			if(textFieldHourlyRate.getText().isEmpty())
+				textFieldHourlyRate.setText("0");				
+			if(textFieldHours.getText().isEmpty())
+				textFieldHours.setText("0");
+			if(textFieldSalary.getText().isEmpty())
+				textFieldSalary.setText("0");
+			if(textFieldSales.getText().isEmpty())
+				textFieldSales.setText("0");
 			
-			if (textFieldName.getText().equals("")) JOptionPane.showMessageDialog(this, "Please enter a name", "Warning", JOptionPane.WARNING_MESSAGE);
-			// Todo : find a way to force the user to enter only number in the other JtextField
 			else
 			{
 				okPressed = true;

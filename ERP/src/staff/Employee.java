@@ -141,7 +141,7 @@ public abstract class Employee implements Serializable, Cloneable
 	{
 		try
 		{
-			return (HourlyEmployee) super.clone(); // invoke the clone method of Object base class
+			return (Employee) super.clone(); // invoke the clone method of Object base class
 		}
 		catch(CloneNotSupportedException e)
 		{ 	//This should not happen.

@@ -24,7 +24,7 @@ public class HourlyEmployee extends Employee
 	static public final double DEFAULT_WAGERATE = 0.;
 	static public final int DEFAULT_HOURS = 0;
 
-	// TODO explain why we define the following constant
+	// Variable used to define the type of the instantiated object.
 	public final static String CLASS_NAME = "Temporaire";
 
 	private double wageRate;	// salary per hours

@@ -26,7 +26,7 @@ public class Manager extends Employee
 	// value other than 0.
 	public static final double DEFAULT_SALARY = 0.;
 	
-	// TODO explain why we define the following constant
+	// Variable used to define the type of the instantiated object.
 	public final static String CLASS_NAME = "Manager";
 
 	private double salary;	// monthly salary
