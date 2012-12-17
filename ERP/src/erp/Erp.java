@@ -190,7 +190,7 @@ public class Erp extends JFrame
 					JTable target = (JTable) e.getSource();
 					int row = target.getSelectedRow();
 
-					openEditDialog(row);
+					editEmployee(row);
 				}
 			}
 		});
@@ -201,7 +201,7 @@ public class Erp extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0)
 			{
-				openAddDialog();
+				addEmployee();
 			}
 		});
 
@@ -218,7 +218,7 @@ public class Erp extends JFrame
 								"Erreur, il faut sélectionner une ligne");
 				else
 				{
-					openEditDialog(table.getSelectedRow());
+					editEmployee(table.getSelectedRow());
 				}
 			}
 		});
@@ -261,7 +261,7 @@ public class Erp extends JFrame
 	 * @param row
 	 *            the row to be shown/edited
 	 */
-	private void openEditDialog(int row)
+	private void editEmployee(int row)
 	{
 
 		int index = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
@@ -299,7 +299,7 @@ public class Erp extends JFrame
 		}
 
 		// Opens the modal dialog
-		DetailDialog editDialog = new DetailDialog(employeeType, index, name,
+		AddModifyEmployeeDialog editDialog = new AddModifyEmployeeDialog(employeeType, index, name,
 				hourlyRate, hours, commission, sales, salary);
 		editDialog.setVisible(true);
 
@@ -348,27 +348,27 @@ public class Erp extends JFrame
 	/**
 	 * Opens the dialog to add a new employee Takes no parameter
 	 */
-	private void openAddDialog()
+	private void addEmployee()
 	{
 
-		DetailDialog addDialog = new DetailDialog(employeeList.getSize() + 1);
-		addDialog.setVisible(true);
+		AddModifyEmployeeDialog addEmployeeDialog = new AddModifyEmployeeDialog(employeeList.getSize() + 1);
+		addEmployeeDialog.setVisible(true);
 
 		// Checks if the dialog was exited using OK
-		if (addDialog.getOkPressed())
+		if (addEmployeeDialog.getOkPressed())
 		{
 
 			Employee employee;
-			String name = addDialog.getTextFieldName();
-			double hours = Double.valueOf(addDialog.getTextFieldHours());
-			double hourlyRate = Double.valueOf(addDialog
+			String name = addEmployeeDialog.getTextFieldName();
+			double hours = Double.valueOf(addEmployeeDialog.getTextFieldHours());
+			double hourlyRate = Double.valueOf(addEmployeeDialog
 					.getTextFieldHourlyRate());
-			double commission = Double.valueOf(addDialog
+			double commission = Double.valueOf(addEmployeeDialog
 					.getTextFieldCommission());
-			double sales = Double.valueOf(addDialog.getTextFieldSales());
-			double salary = Double.valueOf(addDialog.getTextFieldSalary());
+			double sales = Double.valueOf(addEmployeeDialog.getTextFieldSales());
+			double salary = Double.valueOf(addEmployeeDialog.getTextFieldSalary());
 
-			String employeeType = addDialog.getEmployeeType();
+			String employeeType = addEmployeeDialog.getEmployeeType();
 
 			switch (employeeType)
 			{

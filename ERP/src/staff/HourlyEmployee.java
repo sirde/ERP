@@ -21,8 +21,8 @@ public class HourlyEmployee extends Employee
 	// field defined inside a class, it could be useful to define the two
 	//following constants, if for any reason we decide to set a default
 	// value other than 0.
-	static final double DEFAULT_RATE = 0;
-	static final int DEFAULT_HOURS = 0;
+	static public final double DEFAULT_WAGERATE = 0;
+	static public final int DEFAULT_HOURS = 0;
 
 	// TODO explain why we define the following constant
 	public final static String CLASS_NAME = "Temporaire";
@@ -37,7 +37,7 @@ public class HourlyEmployee extends Employee
 	{
 		super(); // call default constructor of Employee Class to set the
 					// default name field
-		wageRate = DEFAULT_RATE;
+		wageRate = DEFAULT_WAGERATE;
 		hours = DEFAULT_HOURS;
 	}
 

@@ -32,7 +32,7 @@ import java.awt.Dimension;
  * @author C.Gerber
  * 
  */
-public class DetailDialog extends JDialog implements ActionListener
+public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 {
 
 	/**
@@ -89,10 +89,17 @@ public class DetailDialog extends JDialog implements ActionListener
 	 * @param id
 	 *            The id of the element to add
 	 */
-	public DetailDialog(int id)
+	public AddModifyEmployeeDialog(int id)
 	{
-		this(Employee.CLASS_NAME, id, "", 0, 0, 0, 0, 0);
-
+		this(Employee.CLASS_NAME,
+				id,
+				"",
+				HourlyEmployee.DEFAULT_WAGERATE,
+				HourlyEmployee.DEFAULT_HOURS,
+				SalesMan.DEFAULT_COMMISSION,
+				SalesMan.DEFAULT_SALES,
+				Manager.DEFAULT_SALARY
+				);	// Invoke the constructor who get all field explicitly
 	}
 
 	/**
@@ -101,15 +108,15 @@ public class DetailDialog extends JDialog implements ActionListener
 	 * @param employeeType
 	 * @param name
 	 * @param id
-	 * @param hourlyRate
+	 * @param wageRate
 	 * @param hours
 	 * @param commission
 	 * @param sales
 	 * @param salary
 	 * @wbp.parser.constructor
 	 */
-	public DetailDialog(String employeeType, int id, String name,
-			double hourlyRate, double hours, double commission, double sales,
+	public AddModifyEmployeeDialog(String employeeType, int id, String name,
+			double wageRate, double hours, double commission, double sales,
 			double salary)
 	{
 		super((Frame) null, "Mon dialogue", true);
@@ -150,7 +157,10 @@ public class DetailDialog extends JDialog implements ActionListener
 
 		comboBoxEmployeeType.setModel(new DefaultComboBoxModel<String>(
 				new String[]
-				{ HourlyEmployee.CLASS_NAME, SalesMan.CLASS_NAME, Manager.CLASS_NAME }));
+				{
+						HourlyEmployee.CLASS_NAME, SalesMan.CLASS_NAME,
+						Manager.CLASS_NAME
+				}));
 
 		comboBoxEmployeeType.setSelectedItem(employeeType);
 
@@ -235,7 +245,7 @@ public class DetailDialog extends JDialog implements ActionListener
 
 		textFieldHourlyRate = new JFormattedTextField(nf);
 		horizontalBoxHourlyRate.add(textFieldHourlyRate);
-		textFieldHourlyRate.setText(String.valueOf(hourlyRate));
+		textFieldHourlyRate.setText(String.valueOf(wageRate));
 		textFieldHourlyRate.setColumns(10);
 
 		horizontalBoxHours = Box.createHorizontalBox();
@@ -306,7 +316,6 @@ public class DetailDialog extends JDialog implements ActionListener
 			horizontalBoxSalary.setVisible(true);
 			employeeType = Manager.CLASS_NAME;
 		}
-
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -321,7 +330,6 @@ public class DetailDialog extends JDialog implements ActionListener
 				okPressed = true;
 				setVisible(false);
 			}
-
 		} // met fin au dialogue et rend la boite invisible.
 	}
 
