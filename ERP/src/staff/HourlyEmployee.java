@@ -21,7 +21,7 @@ public class HourlyEmployee extends Employee
 	// field defined inside a class, it could be useful to define the two
 	//following constants, if for any reason we decide to set a default
 	// value other than 0.
-	static public final double DEFAULT_WAGERATE = 0;
+	static public final double DEFAULT_WAGERATE = 0.;
 	static public final int DEFAULT_HOURS = 0;
 
 	// TODO explain why we define the following constant

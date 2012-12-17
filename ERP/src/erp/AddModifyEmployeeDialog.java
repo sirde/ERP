@@ -110,6 +110,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	 * @param commission
 	 * @param sales
 	 * @param salary
+	 * @wbp.parser.constructor
 	 */
 	public AddModifyEmployeeDialog(String employeeType, int id, String name,
 			double wageRate, double hours, double commission, double sales,
@@ -117,8 +118,9 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	{
 		super((Frame) null, "Mon dialogue", true);
 
-		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in
-																		// javax.swing.text
+		// use a NumberFormat and NumberFormatter object to force the user to fill only valid number in JtextField
+		// dedicated for numbers
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in javax.swing.text
 		numberFormat.setMaximumFractionDigits(2);
 		NumberFormatter nf = new NumberFormatter(numberFormat);
 		nf.setMinimum(0.0);
@@ -321,21 +323,35 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	}
 	
 	/**
-	 * @param event source
+	 * @param event
 	 */
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == okButton)
 		{
-			if (textFieldName.getText().equals("")) JOptionPane
-					.showMessageDialog(getContentPane(),
-							"Error, a name is required.");
+			// Check if name doesn't exist and show 
+			// a dialog box to inform the user the fill it if it's the case
+			// else hide the AddModifyEmployeeDialog and go back to erp JFrame
+			//
+			
+			/*
+			private JTextField textFieldName;
+			private JTextField textFieldID;
+			private JTextField textFieldHourlyRate;
+			private JTextField textFieldHours;
+			private JTextField textFieldCommission;
+			private JTextField textFieldSales;
+			private JTextField textFieldSalary;
+			*/
+			
+			if (textFieldName.getText().equals("")) JOptionPane.showMessageDialog(this, "Please enter a name", "Warning", JOptionPane.WARNING_MESSAGE);
+			// Todo : find a way to force the user to enter only number in the other JtextField
 			else
 			{
 				okPressed = true;
 				setVisible(false);
 			}
-		} // met fin au dialogue et rend la boite invisible.
+		}
 	}
 
 	/**

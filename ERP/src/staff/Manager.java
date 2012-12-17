@@ -24,7 +24,7 @@ public class Manager extends Employee
 	// field defined inside a class, it could be useful to define the two
 	//following constants, if for any reason we decide to set a default
 	// value other than 0.
-	public static final double DEFAULT_SALARY = 0;
+	public static final double DEFAULT_SALARY = 0.;
 	
 	// TODO explain why we define the following constant
 	public final static String CLASS_NAME = "Manager";
