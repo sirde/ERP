@@ -159,7 +159,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 				}));
 		// default field for comboBoxEmployeeType will be the first in the list
 
-		// Add action listener to allow to update dialog GUI depending on the
+		// Add ItemListener to allow to update dialog GUI depending on the
 		// kind of employee selected
 		comboBoxEmployeeType.addItemListener(new ItemListener()
 		{
@@ -284,37 +284,45 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 		updateGUI();
 	}
 
+	// this private method manage the field to show depending on the kind of employee selected in the comboBoxEmployeeType
 	private void updateGUI()
 	{
-		if (comboBoxEmployeeType.getSelectedItem() == HourlyEmployee.CLASS_NAME)
+		// Use the benefit of the new functionality in Java 7 (-> String in switch statement) ;-)
+		// We enable/disable the different field corresponding to the type of employee selected
+		switch((String)comboBoxEmployeeType.getSelectedItem())
 		{
-			horizontalBoxSales.setVisible(false);
-			horizontalBoxCommission.setVisible(false);
-			horizontalBoxHourlyRate.setVisible(true);
-			horizontalBoxHours.setVisible(true);
-			horizontalBoxSalary.setVisible(false);
-			employeeType = HourlyEmployee.CLASS_NAME;
-		}
-		else if (comboBoxEmployeeType.getSelectedItem() == SalesMan.CLASS_NAME)
-		{
-			horizontalBoxSales.setVisible(true);
-			horizontalBoxCommission.setVisible(true);
-			horizontalBoxHourlyRate.setVisible(true);
-			horizontalBoxHours.setVisible(true);
-			horizontalBoxSalary.setVisible(false);
-			employeeType = SalesMan.CLASS_NAME;
-		}
-		else if (comboBoxEmployeeType.getSelectedItem() == Manager.CLASS_NAME)
-		{
-			horizontalBoxSales.setVisible(false);
-			horizontalBoxCommission.setVisible(false);
-			horizontalBoxHourlyRate.setVisible(false);
-			horizontalBoxHours.setVisible(false);
-			horizontalBoxSalary.setVisible(true);
-			employeeType = Manager.CLASS_NAME;
+			case HourlyEmployee.CLASS_NAME :
+				horizontalBoxSales.setVisible(false);
+				horizontalBoxCommission.setVisible(false);
+				horizontalBoxHourlyRate.setVisible(true);
+				horizontalBoxHours.setVisible(true);
+				horizontalBoxSalary.setVisible(false);
+				employeeType = HourlyEmployee.CLASS_NAME;
+				break;
+				
+			case SalesMan.CLASS_NAME :
+				horizontalBoxSales.setVisible(true);
+				horizontalBoxCommission.setVisible(true);
+				horizontalBoxHourlyRate.setVisible(true);
+				horizontalBoxHours.setVisible(true);
+				horizontalBoxSalary.setVisible(false);
+				employeeType = SalesMan.CLASS_NAME;
+				break;
+			case Manager.CLASS_NAME :
+				horizontalBoxSales.setVisible(false);
+				horizontalBoxCommission.setVisible(false);
+				horizontalBoxHourlyRate.setVisible(false);
+				horizontalBoxHours.setVisible(false);
+				horizontalBoxSalary.setVisible(true);
+				employeeType = Manager.CLASS_NAME;
+				break;
+			default : assert(false); // should never occur !
 		}
 	}
-
+	
+	/**
+	 * @param event source
+	 */
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == okButton)
