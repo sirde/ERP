@@ -7,6 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,10 +23,10 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.text.NumberFormatter;
 
-import staff.Employe;
-import staff.HourlyEmploye;
+import staff.Employee;
+import staff.HourlyEmployee;
 import staff.Manager;
-import staff.Salesman;
+import staff.SalesMan;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -32,7 +35,7 @@ import java.awt.Dimension;
  * @author C.Gerber
  * 
  */
-public class DetailDialog extends JDialog implements ActionListener
+public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 {
 
 	/**
@@ -44,8 +47,7 @@ public class DetailDialog extends JDialog implements ActionListener
 	 * 
 	 */
 
-	private JButton okButton; // Composant Swing.
-
+	private JButton okButton;
 	private JTextField textFieldName;
 	private JTextField textFieldID;
 	private JTextField textFieldHourlyRate;
@@ -53,13 +55,13 @@ public class DetailDialog extends JDialog implements ActionListener
 	private JTextField textFieldCommission;
 	private JTextField textFieldSales;
 	private JTextField textFieldSalary;
-	private String employeType;
+	private String employeeType;
 	private Box verticalBoxTextFields;
 	private JLabel labelIndex;
 	private Box verticalBoxLabel;
 	private Box horizontalBoxIndex;
-	private Box horizontalBoxEmployeType;
-	private JLabel labelEmployeType;
+	private Box horizontalBoxEmployeeType;
+	private JLabel labelEmployeeType;
 	private Component horizontalStrut;
 	private Component horizontalStrut_1;
 	private Box horizontalBoxName;
@@ -80,7 +82,7 @@ public class DetailDialog extends JDialog implements ActionListener
 	private JLabel labelHourlyRate;
 	private JLabel labelHours;
 	private Component horizontalStrut_7;
-	private JComboBox<String> comboBoxEmployeType;
+	private JComboBox<String> comboBoxEmployeeType;
 	private boolean okPressed = false;
 
 	/**
@@ -89,33 +91,36 @@ public class DetailDialog extends JDialog implements ActionListener
 	 * @param id
 	 *            The id of the element to add
 	 */
-	public DetailDialog(int id)
+	public AddModifyEmployeeDialog(int id)
 	{
-		this(Employe.CLASS_NAME, id, "", 0, 0, 0, 0, 0);
-
+		// Invoke the constructor who get all field explicitly
+		this(Employee.CLASS_NAME, id, "", HourlyEmployee.DEFAULT_WAGERATE,
+				HourlyEmployee.DEFAULT_HOURS, SalesMan.DEFAULT_COMMISSION,
+				SalesMan.DEFAULT_SALES, Manager.DEFAULT_SALARY);
 	}
 
 	/**
-	 * Constructor used to edit an employe
+	 * Constructor used to edit an employee
 	 * 
-	 * @param employeType
+	 * @param employeeType
 	 * @param name
 	 * @param id
-	 * @param hourlyRate
+	 * @param wageRate
 	 * @param hours
 	 * @param commission
 	 * @param sales
 	 * @param salary
 	 * @wbp.parser.constructor
 	 */
-	public DetailDialog(String employeType, int id, String name,
-			double hourlyRate, double hours, double commission, double sales,
+	public AddModifyEmployeeDialog(String employeeType, int id, String name,
+			double wageRate, double hours, double commission, double sales,
 			double salary)
 	{
 		super((Frame) null, "Mon dialogue", true);
 
-		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in
-																		// javax.swing.text
+		// use a NumberFormat and NumberFormatter object to force the user to fill only valid number in JtextField
+		// dedicated for numbers
+		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in javax.swing.text
 		numberFormat.setMaximumFractionDigits(2);
 		NumberFormatter nf = new NumberFormatter(numberFormat);
 		nf.setMinimum(0.0);
@@ -134,33 +139,37 @@ public class DetailDialog extends JDialog implements ActionListener
 		verticalBoxTextFields = Box.createVerticalBox();
 		getContentPane().add(verticalBoxTextFields);
 
-		horizontalBoxEmployeType = Box.createHorizontalBox();
-		verticalBoxTextFields.add(horizontalBoxEmployeType);
+		horizontalBoxEmployeeType = Box.createHorizontalBox();
+		verticalBoxTextFields.add(horizontalBoxEmployeeType);
 
-		labelEmployeType = new JLabel("Type d'employé");
-		labelEmployeType.setPreferredSize(new Dimension(100, 20));
-		horizontalBoxEmployeType.add(labelEmployeType);
+		labelEmployeeType = new JLabel("Type d'employé");
+		labelEmployeeType.setPreferredSize(new Dimension(100, 20));
+		horizontalBoxEmployeeType.add(labelEmployeeType);
 
 		horizontalStrut_1 = Box.createHorizontalStrut(20);
-		horizontalBoxEmployeType.add(horizontalStrut_1);
+		horizontalBoxEmployeeType.add(horizontalStrut_1);
 
-		comboBoxEmployeType = new JComboBox<String>();
+		comboBoxEmployeeType = new JComboBox<String>();
 
-		horizontalBoxEmployeType.add(comboBoxEmployeType);
+		horizontalBoxEmployeeType.add(comboBoxEmployeeType);
 
-		comboBoxEmployeType.setModel(new DefaultComboBoxModel<String>(
+		comboBoxEmployeeType.setModel(new DefaultComboBoxModel<String>(
 				new String[]
-				{ HourlyEmploye.CLASS_NAME, Salesman.CLASS_NAME, Manager.CLASS_NAME }));
+				{
+						HourlyEmployee.CLASS_NAME, SalesMan.CLASS_NAME,
+						Manager.CLASS_NAME
+				}));
+		// default field for comboBoxEmployeeType will be the first in the list
 
-		comboBoxEmployeType.setSelectedItem(employeType);
-
-		comboBoxEmployeType.addActionListener(new ActionListener()
+		// Add ItemListener to allow to update dialog GUI depending on the
+		// kind of employee selected
+		comboBoxEmployeeType.addItemListener(new ItemListener()
 		{
-			public void actionPerformed(ActionEvent arg0)
+			@Override
+			public void itemStateChanged(ItemEvent e)
 			{
 				updateGUI();
 			}
-
 		});
 
 		horizontalBoxIndex = Box.createHorizontalBox();
@@ -235,7 +244,7 @@ public class DetailDialog extends JDialog implements ActionListener
 
 		textFieldHourlyRate = new JFormattedTextField(nf);
 		horizontalBoxHourlyRate.add(textFieldHourlyRate);
-		textFieldHourlyRate.setText(String.valueOf(hourlyRate));
+		textFieldHourlyRate.setText(String.valueOf(wageRate));
 		textFieldHourlyRate.setColumns(10);
 
 		horizontalBoxHours = Box.createHorizontalBox();
@@ -277,52 +286,72 @@ public class DetailDialog extends JDialog implements ActionListener
 		updateGUI();
 	}
 
+	// this private method manage the field to show depending on the kind of employee selected in the comboBoxEmployeeType
 	private void updateGUI()
 	{
-		if (comboBoxEmployeType.getSelectedItem() == HourlyEmploye.CLASS_NAME)
+		// Use the benefit of the new functionality in Java 7 (-> String in switch statement) ;-)
+		// We enable/disable the different field corresponding to the type of employee selected
+		switch((String)comboBoxEmployeeType.getSelectedItem())
 		{
-			horizontalBoxSales.setVisible(false);
-			horizontalBoxCommission.setVisible(false);
-			horizontalBoxHourlyRate.setVisible(true);
-			horizontalBoxHours.setVisible(true);
-			horizontalBoxSalary.setVisible(false);
-			employeType = HourlyEmploye.CLASS_NAME;
+			case HourlyEmployee.CLASS_NAME :
+				horizontalBoxSales.setVisible(false);
+				horizontalBoxCommission.setVisible(false);
+				horizontalBoxHourlyRate.setVisible(true);
+				horizontalBoxHours.setVisible(true);
+				horizontalBoxSalary.setVisible(false);
+				employeeType = HourlyEmployee.CLASS_NAME;
+				break;
+				
+			case SalesMan.CLASS_NAME :
+				horizontalBoxSales.setVisible(true);
+				horizontalBoxCommission.setVisible(true);
+				horizontalBoxHourlyRate.setVisible(true);
+				horizontalBoxHours.setVisible(true);
+				horizontalBoxSalary.setVisible(false);
+				employeeType = SalesMan.CLASS_NAME;
+				break;
+			case Manager.CLASS_NAME :
+				horizontalBoxSales.setVisible(false);
+				horizontalBoxCommission.setVisible(false);
+				horizontalBoxHourlyRate.setVisible(false);
+				horizontalBoxHours.setVisible(false);
+				horizontalBoxSalary.setVisible(true);
+				employeeType = Manager.CLASS_NAME;
+				break;
+			default : assert(false); // should never occur !
 		}
-		else if (comboBoxEmployeType.getSelectedItem() == Salesman.CLASS_NAME)
-		{
-			horizontalBoxSales.setVisible(true);
-			horizontalBoxCommission.setVisible(true);
-			horizontalBoxHourlyRate.setVisible(true);
-			horizontalBoxHours.setVisible(true);
-			horizontalBoxSalary.setVisible(false);
-			employeType = Salesman.CLASS_NAME;
-		}
-		else if (comboBoxEmployeType.getSelectedItem() == Manager.CLASS_NAME)
-		{
-			horizontalBoxSales.setVisible(false);
-			horizontalBoxCommission.setVisible(false);
-			horizontalBoxHourlyRate.setVisible(false);
-			horizontalBoxHours.setVisible(false);
-			horizontalBoxSalary.setVisible(true);
-			employeType = Manager.CLASS_NAME;
-		}
-
 	}
-
+	
+	/**
+	 * @param event
+	 */
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == okButton)
 		{
-			if (textFieldName.getText().equals("")) JOptionPane
-					.showMessageDialog(getContentPane(),
-							"Error, a name is required.");
+			// Check if name doesn't exist and show 
+			// a dialog box to inform the user the fill it if it's the case
+			// else hide the AddModifyEmployeeDialog and go back to erp JFrame
+			//
+			
+			/*
+			private JTextField textFieldName;
+			private JTextField textFieldID;
+			private JTextField textFieldHourlyRate;
+			private JTextField textFieldHours;
+			private JTextField textFieldCommission;
+			private JTextField textFieldSales;
+			private JTextField textFieldSalary;
+			*/
+			
+			if (textFieldName.getText().equals("")) JOptionPane.showMessageDialog(this, "Please enter a name", "Warning", JOptionPane.WARNING_MESSAGE);
+			// Todo : find a way to force the user to enter only number in the other JtextField
 			else
 			{
 				okPressed = true;
 				setVisible(false);
 			}
-
-		} // met fin au dialogue et rend la boite invisible.
+		}
 	}
 
 	/**
@@ -382,11 +411,11 @@ public class DetailDialog extends JDialog implements ActionListener
 	}
 
 	/**
-	 * @return Employe Type
+	 * @return Employee Type
 	 */
-	public String getEmployeType()
+	public String getEmployeeType()
 	{
-		return employeType;
+		return employeeType;
 	}
 
 	/**
