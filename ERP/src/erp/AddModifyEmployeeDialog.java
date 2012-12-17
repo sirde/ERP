@@ -7,6 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -44,8 +47,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	 * 
 	 */
 
-	private JButton okButton; // Composant Swing.
-
+	private JButton okButton;
 	private JTextField textFieldName;
 	private JTextField textFieldID;
 	private JTextField textFieldHourlyRate;
@@ -91,15 +93,10 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	 */
 	public AddModifyEmployeeDialog(int id)
 	{
-		this(Employee.CLASS_NAME,
-				id,
-				"",
-				HourlyEmployee.DEFAULT_WAGERATE,
-				HourlyEmployee.DEFAULT_HOURS,
-				SalesMan.DEFAULT_COMMISSION,
-				SalesMan.DEFAULT_SALES,
-				Manager.DEFAULT_SALARY
-				);	// Invoke the constructor who get all field explicitly
+		// Invoke the constructor who get all field explicitly
+		this(Employee.CLASS_NAME, id, "", HourlyEmployee.DEFAULT_WAGERATE,
+				HourlyEmployee.DEFAULT_HOURS, SalesMan.DEFAULT_COMMISSION,
+				SalesMan.DEFAULT_SALES, Manager.DEFAULT_SALARY);
 	}
 
 	/**
@@ -113,7 +110,6 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	 * @param commission
 	 * @param sales
 	 * @param salary
-	 * @wbp.parser.constructor
 	 */
 	public AddModifyEmployeeDialog(String employeeType, int id, String name,
 			double wageRate, double hours, double commission, double sales,
@@ -161,16 +157,17 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 						HourlyEmployee.CLASS_NAME, SalesMan.CLASS_NAME,
 						Manager.CLASS_NAME
 				}));
+		// default field for comboBoxEmployeeType will be the first in the list
 
-		comboBoxEmployeeType.setSelectedItem(employeeType);
-
-		comboBoxEmployeeType.addActionListener(new ActionListener()
+		// Add action listener to allow to update dialog GUI depending on the
+		// kind of employee selected
+		comboBoxEmployeeType.addItemListener(new ItemListener()
 		{
-			public void actionPerformed(ActionEvent arg0)
+			@Override
+			public void itemStateChanged(ItemEvent e)
 			{
 				updateGUI();
 			}
-
 		});
 
 		horizontalBoxIndex = Box.createHorizontalBox();
