@@ -32,21 +32,17 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 /**
- * @author C.Gerber
+ * @author C. Gerber & O.Guédat
  * 
  */
 public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
+	/*
+	 * All the element of the GUI
 	 */
-
 	private JButton okButton;
 	private JTextField textFieldName;
 	private JTextField textFieldID;
@@ -83,6 +79,9 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	private JLabel labelHours;
 	private Component horizontalStrut_7;
 	private JComboBox<String> comboBoxEmployeeType;
+
+	// Boolean used to check if the dialog has been exited through pressing the
+	// OK button
 	private boolean okPressed = false;
 
 	/**
@@ -118,11 +117,11 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	{
 		super((Frame) null, "Mon dialogue", true);
 
-		// use a NumberFormat and NumberFormatter object to force the user to
-		// fill only valid number in JtextField
-		// dedicated for numbers
-		NumberFormat numberFormat = NumberFormat.getNumberInstance(); // in
-																		// javax.swing.text
+		/*
+		 * use a NumberFormat and NumberFormatter object to force the user to
+		 * fill only valid number in JFormattedTextField dedicated for numbers
+		 */
+		NumberFormat numberFormat = NumberFormat.getNumberInstance();
 		numberFormat.setMaximumFractionDigits(2);
 		numberFormat.setGroupingUsed(false);
 		NumberFormatter nf = new NumberFormatter(numberFormat);
@@ -162,10 +161,8 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 						HourlyEmployee.CLASS_NAME, SalesMan.CLASS_NAME,
 						Manager.CLASS_NAME
 				}));
-		// default field for comboBoxEmployeeType will be the first in the list
-
-		// Add ItemListener to allow to update dialog GUI depending on the
-		// kind of employee selected
+		
+		// This updates the GUI when the comboBox value is changed
 		comboBoxEmployeeType.addItemListener(new ItemListener()
 		{
 			@Override
@@ -286,6 +283,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 		verticalBoxTextFields.add(okButton);
 		okButton.addActionListener(this);
 
+		//Update the GUI in order to show the correct fields and value
 		updateGUI();
 	}
 

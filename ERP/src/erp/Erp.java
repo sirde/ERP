@@ -34,7 +34,8 @@ import staff.*;
 import utility.LinkedList;
 
 /**
- * @author C. Gerber & O.Guédat ERP: means Enterprise ressource planning
+ * @author C. Gerber & O.Guédat
+ * @definition ERP: means Enterprise ressource planning
  * 
  */
 
@@ -491,24 +492,24 @@ public class Erp extends JFrame
 	 */
 	private void openFile()
 	{
-		//Open the dialog which allows choosing the file to open
+		// Open the dialog which allows choosing the file to open
 		int returnVal = chooser.showOpenDialog(getContentPane());
-		
-		//Check if the OK button was pressed
+
+		// Check if the OK button was pressed
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			//Used for debug purposes
+			// Used for debug purposes
 			if (DEBUG) System.out.println("You chose to open this file: "
 					+ chooser.getSelectedFile().getPath());
-			
+
 			File file = chooser.getSelectedFile();
 
-			//Checks if the file exists
+			// Checks if the file exists
 			if (file.exists())
 			{
 				try
 				{
-					//Reads the file and put it in the employee list
+					// Reads the file and put it in the employee list
 					FileInputStream fis = new FileInputStream(file);
 					ObjectInputStream ois = new ObjectInputStream(fis);
 					employeeList = (LinkedList<Employee>) ois.readObject();
@@ -516,20 +517,20 @@ public class Erp extends JFrame
 				}
 				catch (Exception e)
 				{
-					//Used for debug purpose only
+					// Used for debug purpose only
 					if (DEBUG) System.out
 							.println("Error while opening the file");
 					e.printStackTrace();
 					return;
 				}
-				
-				//Erase all rows of the GUI
+
+				// Erase all rows of the GUI
 				while (tableModel.getRowCount() > 0)
 				{
 					tableModel.removeRow(0);
 				}
 
-				//Fill the table according to the new employee list
+				// Fill the table according to the new employee list
 				int i = 1;
 				Employee employee;
 				while (i <= employeeList.getSize())
