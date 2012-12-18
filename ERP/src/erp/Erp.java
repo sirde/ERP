@@ -34,13 +34,9 @@ import staff.*;
 import utility.LinkedList;
 
 /**
- * @author C.Gerber ERP: means Enterprise resource planning
+ * @author C. Gerber & O.Guédat ERP: means Enterprise ressource planning
  * 
  */
-
-//TODO : fix bug when we enter characters in field dedicated for number !
-// sometimes, the filed for number becomes empty ! it generate many exeption when we press ok...
-//show massage pop-up when entry error or save file when table entry doesn't exist
 
 public class Erp extends JFrame
 {
@@ -60,12 +56,15 @@ public class Erp extends JFrame
 	public final static boolean DEBUG = true;
 
 	/**
-	 * 
+	 * The list which will the employee
+	 */
+	private LinkedList<Employee> employeeList;
+
+	/**
+	 * The various elements of the GUI
 	 */
 	private static JTable table;
 	private static DefaultTableModel tableModel;
-
-	private LinkedList<Employee> employeeList;
 	private JButton btnShow;
 	private JFileChooser chooser;
 	private JButton btnAdd;
@@ -110,9 +109,6 @@ public class Erp extends JFrame
 		getContentPane().add(GestionPanel, BorderLayout.SOUTH);
 		GestionPanel.setMaximumSize(new Dimension(32767, 600));
 
-		menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-
 		/*
 		 * Definition of the default saving location and extension
 		 */
@@ -124,6 +120,11 @@ public class Erp extends JFrame
 		chooser.setFileFilter(filter);
 		chooser.setAcceptAllFileFilterUsed(false);
 
+		/*
+		 * Add the menu elements
+		 */
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
 		mnFile = new JMenu("fichier");
 		menuBar.add(mnFile);
 
@@ -151,6 +152,9 @@ public class Erp extends JFrame
 
 		mnFile.add(menuSaveFile);
 
+		/*
+		 * Creates the list which will contains all the employe
+		 */
 		employeeList = new LinkedList<Employee>();
 
 		table = new JTable();
@@ -160,29 +164,33 @@ public class Erp extends JFrame
 		pane = new JScrollPane(table);
 		getContentPane().add(pane, BorderLayout.CENTER);
 
+		// Defines the names of the column to be shown in the GUI table
 		String[] columnNames =
-		{ "Index", "nom", "Type", "Salaire" };
+		{
+				"Index", "nom", "Type", "Salaire"
+		};
 
 		// TableModel used to manage the data in the table
+		// it needs to override the method isCellEditable in order to prevent
+		// the editing of cells
 		tableModel = new DefaultTableModel(columnNames, 0)
 		{
 
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = -4957135629083872096L;
 
-			// Overrides this method in order to disable the edition of cells
 			@Override
 			public boolean isCellEditable(int row, int column)
 			{
-				// all cells false
+				// all cells are false/non editable
 				return false;
 			}
 		};
 
 		table.setModel(tableModel);
 
+		/*
+		 * Set the double click on an element to edit the line clicked
+		 */
 		table.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -197,8 +205,8 @@ public class Erp extends JFrame
 			}
 		});
 
+		// Adds the add button
 		btnAdd = new JButton("Ajouter");
-
 		btnAdd.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -209,6 +217,7 @@ public class Erp extends JFrame
 
 		GestionPanel.add(btnAdd);
 
+		// Adds the show/edit button
 		btnShow = new JButton("Editer");
 		btnShow.addActionListener(new ActionListener()
 		{
@@ -226,15 +235,19 @@ public class Erp extends JFrame
 		});
 		GestionPanel.add(btnShow);
 
+		// Adds the Delete button
 		btnDelete = new JButton("Effacer");
 		btnDelete.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mouseClicked(MouseEvent arg0)
 			{
+				// Show an error if less than 1 line is selected
 				if (table.getSelectedRows().length < 1) JOptionPane
 						.showMessageDialog(getContentPane(),
 								"Erreur, vous devez sélectionner 1 ligne ou plus");
+
+				// Delete the selected rows
 				int[] selection;
 				int index;
 				while (table.getSelectedRows().length > 0)
@@ -242,11 +255,15 @@ public class Erp extends JFrame
 					selection = table.getSelectedRows();
 					index = ((int) tableModel.getValueAt(selection[0], 0));
 
+					// Delete the item in the gui
 					tableModel.removeRow(selection[0]);
+					// And in the List
 					employeeList.delete(index);
 				}
 				table.clearSelection();
 
+				// Reattribute the index in the GUI (The list does not need to
+				// be updated)
 				for (int i = 0; i < table.getRowCount(); i++)
 				{
 					tableModel.setValueAt(i + 1, i, 0);
@@ -265,10 +282,13 @@ public class Erp extends JFrame
 	 */
 	private void editEmployee(int row)
 	{
-
+		// store the index of the element to edit
 		int index = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
 
+		// Store the type the employe list
 		Employee employee = employeeList.get(index);
+
+		// A variable of each fields is created with the default value
 		String name = employee.getName();
 		double hourlyRate = 0;
 		double hours = 0;
@@ -277,6 +297,9 @@ public class Erp extends JFrame
 		double salary = 0;
 		String employeeType = Employee.CLASS_NAME;
 
+		/*
+		 * Set the variables accordingly to the employe type
+		 */
 		if (employee instanceof HourlyEmployee)
 		{
 			name = employee.getName();
@@ -301,14 +324,16 @@ public class Erp extends JFrame
 		}
 
 		// Opens the modal dialog
-		AddModifyEmployeeDialog editDialog = new AddModifyEmployeeDialog(employeeType, index, name,
-				hourlyRate, hours, commission, sales, salary);
+		AddModifyEmployeeDialog editDialog = new AddModifyEmployeeDialog(
+				employeeType, index, name, hourlyRate, hours, commission,
+				sales, salary);
 		editDialog.setVisible(true);
 
-		// Check if the dialog has been exited with ok or exit
+		// Check if the dialog has been exited with OK button or exit
 		if (editDialog.getOkPressed())
 		{
 
+			// Read the value of all fields of the dialog
 			hourlyRate = editDialog.getTextFieldHourlyRate();
 			employeeType = editDialog.getEmployeeType();
 			name = editDialog.getTextFieldName();
@@ -320,6 +345,7 @@ public class Erp extends JFrame
 
 			Employee newEmployee;
 
+			// Create an employee according to the type returned
 			switch (employeeType)
 			{
 				case HourlyEmployee.CLASS_NAME:
@@ -337,6 +363,10 @@ public class Erp extends JFrame
 					break;
 			}
 
+			/**
+			 * If the new employee is not the same as the initial one, it means
+			 * it changed and needs to be updated in the gui and the list
+			 */
 			if (!newEmployee.equals(employee))
 			{
 				employeeList.replace(index, newEmployee);
@@ -353,14 +383,16 @@ public class Erp extends JFrame
 	private void addEmployee()
 	{
 
-		AddModifyEmployeeDialog addEmployeeDialog = new AddModifyEmployeeDialog(employeeList.getSize() + 1);
+		// Open the modal dialog which is used to add an employee
+		AddModifyEmployeeDialog addEmployeeDialog = new AddModifyEmployeeDialog(
+				employeeList.getSize() + 1);
 		addEmployeeDialog.setVisible(true);
 
 		// Checks if the dialog was exited using OK
 		if (addEmployeeDialog.getOkPressed())
 		{
-
-			Employee employee;
+			// A variable of each fields is created and set to the value
+			// returned by the dialog
 			String name = addEmployeeDialog.getTextFieldName();
 			double hours = addEmployeeDialog.getTextFieldHours();
 			double hourlyRate = addEmployeeDialog.getTextFieldHourlyRate();
@@ -370,6 +402,10 @@ public class Erp extends JFrame
 
 			String employeeType = addEmployeeDialog.getEmployeeType();
 
+			Employee employee;
+
+			// An employee is created according to the type returned by the
+			// dialog
 			switch (employeeType)
 			{
 				case HourlyEmployee.CLASS_NAME:
@@ -387,10 +423,16 @@ public class Erp extends JFrame
 					break;
 			}
 
-			Object[] data =
-			{ employeeList.getSize() + 1, name, employeeType, employee.getPay() };
-
+			// The employee is added in the list
 			employeeList.addAtEnd(employee);
+
+			// and in the GUI
+			Object[] data =
+			{
+					employeeList.getSize() + 1, name, employeeType,
+					employee.getPay()
+			};
+
 			tableModel.addRow(data);
 		}
 
@@ -398,23 +440,34 @@ public class Erp extends JFrame
 
 	private void saveFile()
 	{
+		// The dialog to save the file is shown
 		int returnVal = chooser.showSaveDialog(getContentPane());
+
+		// Checks if the OK button was pressed
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
+			// Stores the path
 			File file = chooser.getSelectedFile();
 
+			/*
+			 * Checks the extension of the file, if not equal to the one defined
+			 * for the application, it is added at the end.
+			 */
 			String fileName = file.getName();
 			int position = fileName.lastIndexOf('.');
 			String extension = "";
 			if (position >= 0) extension = fileName.substring(position + 1);
-
 			if (!extension.equals(ERP_EXTENSION)) file = new File(
 					file.getPath() + ".erp");
 
+			// Used for debug purpose
 			if (DEBUG) System.out.println("You chose to save this file: "
 					+ file.getPath());
 			try
 			{
+				/*
+				 * Save the whole employee list in the file
+				 */
 				if (!file.exists()) file.createNewFile();
 				FileOutputStream fos = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -429,20 +482,33 @@ public class Erp extends JFrame
 		}
 	}
 
+	// Suppress the warning caused by the casting of the deserialized element in
+	// a generic list
 	@SuppressWarnings("unchecked")
+	/**
+	 * Function used to open the file containing the serialized employee list
+	 * All the element of the actual list and GUI are erased when opening a file
+	 */
 	private void openFile()
 	{
+		//Open the dialog which allows choosing the file to open
 		int returnVal = chooser.showOpenDialog(getContentPane());
+		
+		//Check if the OK button was pressed
 		if (returnVal == JFileChooser.APPROVE_OPTION)
 		{
-			System.out.println("You chose to open this file: "
+			//Used for debug purposes
+			if (DEBUG) System.out.println("You chose to open this file: "
 					+ chooser.getSelectedFile().getPath());
+			
 			File file = chooser.getSelectedFile();
 
+			//Checks if the file exists
 			if (file.exists())
 			{
 				try
 				{
+					//Reads the file and put it in the employee list
 					FileInputStream fis = new FileInputStream(file);
 					ObjectInputStream ois = new ObjectInputStream(fis);
 					employeeList = (LinkedList<Employee>) ois.readObject();
@@ -450,17 +516,20 @@ public class Erp extends JFrame
 				}
 				catch (Exception e)
 				{
+					//Used for debug purpose only
 					if (DEBUG) System.out
 							.println("Error while opening the file");
 					e.printStackTrace();
 					return;
 				}
-
+				
+				//Erase all rows of the GUI
 				while (tableModel.getRowCount() > 0)
 				{
 					tableModel.removeRow(0);
 				}
 
+				//Fill the table according to the new employee list
 				int i = 1;
 				Employee employee;
 				while (i <= employeeList.getSize())
@@ -475,7 +544,10 @@ public class Erp extends JFrame
 					if (employee instanceof SalesMan) employeeType = SalesMan.CLASS_NAME;
 
 					Object[] data =
-					{ i, employee.getName(), employeeType, employee.getPay() };
+					{
+							i, employee.getName(), employeeType,
+							employee.getPay()
+					};
 					tableModel.addRow(data);
 
 					i++;
@@ -483,6 +555,7 @@ public class Erp extends JFrame
 			}
 			else
 			{
+				// used for debug purpose only
 				if (DEBUG) System.out.println("The file does not exist");
 			}
 		}

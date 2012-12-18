@@ -28,7 +28,7 @@ public abstract class Employee implements Serializable, Cloneable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	// TODO explain why we define the following constant
+	// Variable used to define the type of the instantiated object.
 	public final static String CLASS_NAME = "Employé";
 
 	private String name;
