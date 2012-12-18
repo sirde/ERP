@@ -50,11 +50,11 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	private JButton okButton;
 	private JTextField textFieldName;
 	private JTextField textFieldID;
-	private JTextField textFieldHourlyRate;
-	private JTextField textFieldHours;
-	private JTextField textFieldCommission;
-	private JTextField textFieldSales;
-	private JTextField textFieldSalary;
+	private JFormattedTextField textFieldHourlyRate;
+	private JFormattedTextField textFieldHours;
+	private JFormattedTextField textFieldCommission;
+	private JFormattedTextField textFieldSales;
+	private JFormattedTextField textFieldSalary;
 	private String employeeType;
 	private Box verticalBoxTextFields;
 	private JLabel labelIndex;
@@ -217,7 +217,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 
 		textFieldCommission = new JFormattedTextField(nf);
 		horizontalBoxCommission.add(textFieldCommission);
-		textFieldCommission.setText(String.valueOf(commission));
+		textFieldCommission.setValue(commission);
 		textFieldCommission.setColumns(10);
 
 		horizontalBoxSales = Box.createHorizontalBox();
@@ -232,7 +232,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 
 		textFieldSales = new JFormattedTextField(nf);
 		horizontalBoxSales.add(textFieldSales);
-		textFieldSales.setText(String.valueOf(sales));
+		textFieldSales.setValue(sales);
 		textFieldSales.setColumns(10);
 
 		horizontalBoxHourlyRate = Box.createHorizontalBox();
@@ -247,7 +247,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 
 		textFieldHourlyRate = new JFormattedTextField(nf);
 		horizontalBoxHourlyRate.add(textFieldHourlyRate);
-		textFieldHourlyRate.setText(String.valueOf(wageRate));
+		textFieldHourlyRate.setValue(wageRate);
 		textFieldHourlyRate.setColumns(10);
 
 		horizontalBoxHours = Box.createHorizontalBox();
@@ -263,7 +263,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 		textFieldHours = new JFormattedTextField(nf);
 
 		horizontalBoxHours.add(textFieldHours);
-		textFieldHours.setText(String.valueOf(hours));
+		textFieldHours.setValue(hours);
 		textFieldHours.setColumns(10);
 
 		horizontalBoxSalary = Box.createHorizontalBox();
@@ -278,7 +278,7 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 
 		textFieldSalary = new JFormattedTextField(nf);
 		horizontalBoxSalary.add(textFieldSalary);
-		textFieldSalary.setText(String.valueOf(salary));
+		textFieldSalary.setValue(salary);
 		textFieldSalary.setColumns(10);
 
 		okButton = new JButton("OK");
@@ -341,21 +341,10 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 			// else hide the AddModifyEmployeeDialog and go back to erp JFrame
 
 			if (textFieldName.getText().equals(""))
-				JOptionPane.showMessageDialog(this, "Please enter a name", "Warning",
-							JOptionPane.WARNING_MESSAGE);
-			
-			//If a value is empty, this means it is interpreted as a 0
-			if(textFieldCommission.getText().isEmpty())
-				textFieldCommission.setText("0");
-			if(textFieldHourlyRate.getText().isEmpty())
-				textFieldHourlyRate.setText("0");				
-			if(textFieldHours.getText().isEmpty())
-				textFieldHours.setText("0");
-			if(textFieldSalary.getText().isEmpty())
-				textFieldSalary.setText("0");
-			if(textFieldSales.getText().isEmpty())
-				textFieldSales.setText("0");
-			
+			{
+				JOptionPane.showMessageDialog(this, "Please enter a name",
+						"Warning", JOptionPane.WARNING_MESSAGE);
+			}
 			else
 			{
 				okPressed = true;
@@ -367,9 +356,9 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	/**
 	 * @return hours
 	 */
-	public String getTextFieldHours()
+	public double getTextFieldHours()
 	{
-		return textFieldHours.getText();
+		return (double) textFieldHours.getValue();
 	}
 
 	/**
@@ -391,33 +380,33 @@ public class AddModifyEmployeeDialog extends JDialog implements ActionListener
 	/**
 	 * @return Hourly rate
 	 */
-	public String getTextFieldHourlyRate()
+	public double getTextFieldHourlyRate()
 	{
-		return textFieldHourlyRate.getText();
+		return (double) textFieldHourlyRate.getValue();
 	}
 
 	/**
 	 * @return Commission
 	 */
-	public String getTextFieldCommission()
+	public double getTextFieldCommission()
 	{
-		return textFieldCommission.getText();
+		return (double) textFieldCommission.getValue();
 	}
 
 	/**
 	 * @return Sales
 	 */
-	public String getTextFieldSales()
+	public Double getTextFieldSales()
 	{
-		return textFieldSales.getText();
+		return (double) textFieldSales.getValue();
 	}
 
 	/**
 	 * @return Salary
 	 */
-	public String getTextFieldSalary()
+	public double getTextFieldSalary()
 	{
-		return textFieldSalary.getText();
+		return (double) textFieldSalary.getValue();
 	}
 
 	/**

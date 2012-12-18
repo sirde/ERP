@@ -309,14 +309,14 @@ public class Erp extends JFrame
 		if (editDialog.getOkPressed())
 		{
 
-			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
+			hourlyRate = editDialog.getTextFieldHourlyRate();
 			employeeType = editDialog.getEmployeeType();
 			name = editDialog.getTextFieldName();
-			hours = Double.valueOf(editDialog.getTextFieldHours());
-			hourlyRate = Double.valueOf(editDialog.getTextFieldHourlyRate());
-			commission = Double.valueOf(editDialog.getTextFieldCommission());
-			sales = Double.valueOf(editDialog.getTextFieldSales());
-			salary = Double.valueOf(editDialog.getTextFieldSalary());
+			hours = editDialog.getTextFieldHours();
+			hourlyRate = editDialog.getTextFieldHourlyRate();
+			commission = editDialog.getTextFieldCommission();
+			sales = editDialog.getTextFieldSales();
+			salary = editDialog.getTextFieldSalary();
 
 			Employee newEmployee;
 
@@ -362,13 +362,11 @@ public class Erp extends JFrame
 
 			Employee employee;
 			String name = addEmployeeDialog.getTextFieldName();
-			double hours = Double.valueOf(addEmployeeDialog.getTextFieldHours());
-			double hourlyRate = Double.valueOf(addEmployeeDialog
-					.getTextFieldHourlyRate());
-			double commission = Double.valueOf(addEmployeeDialog
-					.getTextFieldCommission());
-			double sales = Double.valueOf(addEmployeeDialog.getTextFieldSales());
-			double salary = Double.valueOf(addEmployeeDialog.getTextFieldSalary());
+			double hours = addEmployeeDialog.getTextFieldHours();
+			double hourlyRate = addEmployeeDialog.getTextFieldHourlyRate();
+			double commission = addEmployeeDialog.getTextFieldCommission();
+			double sales = addEmployeeDialog.getTextFieldSales();
+			double salary = addEmployeeDialog.getTextFieldSalary();
 
 			String employeeType = addEmployeeDialog.getEmployeeType();
 
