@@ -36,12 +36,12 @@ import utility.LinkedList;
 /**
  * @author C. Gerber & O.Guédat
  * @definition ERP: means Enterprise ressource planning
+ * @version
  * 
  */
 
 public class Erp extends JFrame
 {
-
 	/**
 	 * 
 	 */
@@ -425,13 +425,13 @@ public class Erp extends JFrame
 					break;
 			}
 
-			// The employee is added in the list
+			// Add the new employee created to the list
 			employeeList.addAtEnd(employee);
 
-			// and in the GUI
+			// and add it in the GUI
 			Object[] data =
 			{
-					employeeList.getSize() + 1, name, employeeType,
+					employeeList.getSize(), name, employeeType,
 					employee.getPay()
 			};
 
