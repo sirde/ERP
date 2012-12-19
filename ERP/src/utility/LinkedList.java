@@ -159,7 +159,12 @@ public class LinkedList<T_LinkedList> implements Serializable
 		assert(size != 0);							// list must not be empty
 		assert( (index >= 1) && ( index <= size));	// index range must be from 1 to size			
 
-		if (index == 1 && headCell != null)
+		//check if the list is empty
+		if(size == 0)
+			return;
+		
+		//check if it is the first element of the list
+		if (index == 1)
 		{
 			headCell = headCell.next;
 			size--;
@@ -167,20 +172,18 @@ public class LinkedList<T_LinkedList> implements Serializable
 		else
 		{
 			Cell<T_LinkedList> previousCell = headCell;
-			Cell<T_LinkedList> deletedCell = headCell.next;
 			
 			int i = 2;
 
-			while (i < index && deletedCell.next != null)
+			while (i < index)
 			{
-				previousCell = deletedCell;
-				deletedCell = deletedCell.next;
+				previousCell = previousCell.next;
 
 				i++;
 			}
 			if (index == i)
 			{
-				previousCell.next = deletedCell.next;
+				previousCell.next = previousCell.next.next;
 				size--;
 			}
 		}

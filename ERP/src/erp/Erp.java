@@ -256,26 +256,29 @@ public class Erp extends JFrame
 				else
 				{
 					// Delete the selected rows
-					int[] selection;
+					int selection;
 					int index;
 					while (table.getSelectedRows().length > 0)
 					{
-						selection = table.getSelectedRows();
-						index = ((int) tableModel.getValueAt(selection[0], 0));
+						selection = table.getSelectedRow();
+						index = ((int) tableModel.getValueAt(selection, 0));
 
 						// Delete the item in the GUI
-						tableModel.removeRow(selection[0]);
+						tableModel.removeRow(selection);
 						// And in the List
 						employeeList.delete(index);
+						
+						for (int i = 0; i < table.getRowCount(); i++)
+						{
+							tableModel.setValueAt(i + 1, i, 0);
+						}
+						
 					}
 					table.clearSelection();
 
 					// Reattribute the index in the GUI (The list does not need
 					// to be updated)
-					for (int i = 0; i < table.getRowCount(); i++)
-					{
-						tableModel.setValueAt(i + 1, i, 0);
-					}
+
 				}
 			}
 		});
