@@ -168,7 +168,7 @@ public class LinkedList<T_LinkedList> implements Serializable
 		{
 			Cell<T_LinkedList> previousCell = headCell;
 			Cell<T_LinkedList> deletedCell = headCell.next;
-
+			
 			int i = 2;
 
 			while (i < index && deletedCell.next != null)

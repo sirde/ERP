@@ -33,6 +33,7 @@ import java.awt.Dimension;
 
 /**
  * @author C. Gerber & O.Guédat
+ * @version
  * 
  */
 public class AddModifyEmployeeDialog extends JDialog implements ActionListener

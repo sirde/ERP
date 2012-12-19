@@ -36,12 +36,12 @@ import utility.LinkedList;
 /**
  * @author C. Gerber & O.Guédat
  * @definition ERP: means Enterprise ressource planning
+ * @version
  * 
  */
 
 public class Erp extends JFrame
 {
-
 	/**
 	 * 
 	 */
@@ -101,6 +101,7 @@ public class Erp extends JFrame
 
 	public Erp()
 	{
+		setTitle("Gestionnaire d'employ\u00E9s");
 		setMinimumSize(new Dimension(300, 300));
 		getContentPane().setMinimumSize(new Dimension(150, 150));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -225,9 +226,12 @@ public class Erp extends JFrame
 			public void actionPerformed(ActionEvent arg0)
 			{
 
-				if (table.getSelectedRows().length != 1) JOptionPane
-						.showMessageDialog(getContentPane(),
-								"Erreur, il faut sélectionner une ligne");
+				if (table.getSelectedRows().length != 1)
+				{
+					JOptionPane.showMessageDialog(getContentPane(),
+							"Veuillez sélectionner une ligne", "Information",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
 				else
 				{
 					editEmployee(table.getSelectedRow());
@@ -244,30 +248,34 @@ public class Erp extends JFrame
 			public void mouseClicked(MouseEvent arg0)
 			{
 				// Show an error if less than 1 line is selected
-				if (table.getSelectedRows().length < 1) JOptionPane
-						.showMessageDialog(getContentPane(),
-								"Erreur, vous devez sélectionner 1 ligne ou plus");
-
-				// Delete the selected rows
-				int[] selection;
-				int index;
-				while (table.getSelectedRows().length > 0)
+				if (table.getSelectedRows().length < 1)
 				{
-					selection = table.getSelectedRows();
-					index = ((int) tableModel.getValueAt(selection[0], 0));
-
-					// Delete the item in the gui
-					tableModel.removeRow(selection[0]);
-					// And in the List
-					employeeList.delete(index);
+					JOptionPane.showMessageDialog(getContentPane(),
+							"Erreur, vous devez sélectionner 1 ligne ou plus");
 				}
-				table.clearSelection();
-
-				// Reattribute the index in the GUI (The list does not need to
-				// be updated)
-				for (int i = 0; i < table.getRowCount(); i++)
+				else
 				{
-					tableModel.setValueAt(i + 1, i, 0);
+					// Delete the selected rows
+					int[] selection;
+					int index;
+					while (table.getSelectedRows().length > 0)
+					{
+						selection = table.getSelectedRows();
+						index = ((int) tableModel.getValueAt(selection[0], 0));
+
+						// Delete the item in the GUI
+						tableModel.removeRow(selection[0]);
+						// And in the List
+						employeeList.delete(index);
+					}
+					table.clearSelection();
+
+					// Reattribute the index in the GUI (The list does not need
+					// to be updated)
+					for (int i = 0; i < table.getRowCount(); i++)
+					{
+						tableModel.setValueAt(i + 1, i, 0);
+					}
 				}
 			}
 		});
@@ -286,7 +294,7 @@ public class Erp extends JFrame
 		// store the index of the element to edit
 		int index = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
 
-		// Store the type the employe list
+		// Store the type the employee list
 		Employee employee = employeeList.get(index);
 
 		// A variable of each fields is created with the default value
@@ -424,13 +432,13 @@ public class Erp extends JFrame
 					break;
 			}
 
-			// The employee is added in the list
+			// Add the new employee created to the list
 			employeeList.addAtEnd(employee);
 
-			// and in the GUI
+			// and add it in the GUI
 			Object[] data =
 			{
-					employeeList.getSize() + 1, name, employeeType,
+					employeeList.getSize(), name, employeeType,
 					employee.getPay()
 			};
 
@@ -441,11 +449,15 @@ public class Erp extends JFrame
 
 	private void saveFile()
 	{
-		// The dialog to save the file is shown
-		int returnVal = chooser.showSaveDialog(getContentPane());
-
-		// Checks if the OK button was pressed
-		if (returnVal == JFileChooser.APPROVE_OPTION)
+		// First we test if there are any data to save. If it's not the case,
+		// we show a pop-up to inform the user
+		if (employeeList.isEmpty())
+		{
+			JOptionPane.showMessageDialog(this, "Aucune donnée a sauvegardé !",
+					"Information", JOptionPane.INFORMATION_MESSAGE);
+		}
+		// Else, we checks if the OK button in SaveDialog has been pressed
+		else if (chooser.showSaveDialog(getContentPane()) == JFileChooser.APPROVE_OPTION)
 		{
 			// Stores the path
 			File file = chooser.getSelectedFile();
